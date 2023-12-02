@@ -14,7 +14,14 @@
         border: '235px solid ' + option.color,
         transform: 'rotate(' + option.rotation + ')'
       }">
-      <div style="position: absolute; top: -120px; left: 100px; transform: rotate(130deg)">
+      <div
+        [ngStyle]="{
+          transform: 'rotate(' + option.textRotation + ')',
+          marginLeft: textMarginLeft + 'px',
+          marginTop: textMarginTop + 'px',
+          fontSize: textSize + 'px'
+        }"
+      >
         {{option.text}}
       </div>
     </div>

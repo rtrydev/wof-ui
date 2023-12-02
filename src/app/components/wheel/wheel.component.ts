@@ -15,6 +15,12 @@ export class WheelComponent implements OnDestroy {
 
   public options: WheelOption[] = [];
 
+  public textSize = 22;
+  public textOffset = 90;
+
+  public textMarginTop = 0;
+  public textMarginLeft = 0;
+
   private timeStep = 17;
   private maxDivider = 2048;
 
@@ -22,19 +28,35 @@ export class WheelComponent implements OnDestroy {
   private rotationInterval: any;
 
   private colors = [
-    'red',
-    'green',
-    'blue',
-    'yellow',
-    'pink',
-    'purple',
-    'orange',
-    'white',
-    'gray'
+    'AliceBlue',
+    'Coral',
+    'DeepSkyBlue',
+    'Gold',
+    'HotPink',
+    'Lavender',
+    'MediumSeaGreen',
+    'NavajoWhite',
+    'Olive',
+    'PaleTurquoise',
+    'RoyalBlue',
+    'SlateGray',
+    'Teal',
+    'Violet',
+    'Wheat',
+    'YellowGreen',
+    'Azure',
+    'BurlyWood',
+    'Chocolate',
+    'DarkSalmon'
   ]
 
   constructor() {
-    this.options = this.generateOptions(5);
+    const optionCount = 5;
+
+    this.textMarginTop = -(this.textOffset - this.textSize) * Math.cos(Math.PI / optionCount);
+    this.textMarginLeft = (this.textOffset) * Math.sin(Math.PI / optionCount);
+
+    this.options = this.generateOptions(optionCount);
   }
 
   ngOnDestroy() {
@@ -48,9 +70,10 @@ export class WheelComponent implements OnDestroy {
       result.push({
         text: `option${i + 1}`,
         color: this.colors[
-          Math.floor(Math.random() * this.colors.length)
+            Math.floor(Math.random() * this.colors.length)
           ],
-        rotation: `${i * (360 / optionCount)}deg`
+        rotation: `${i * (360 / optionCount)}deg`,
+        textRotation: `${-90 + (180 / optionCount)}deg`
       })
     }
 
