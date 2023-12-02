@@ -1,0 +1,25 @@
+<div
+  class='spinning-wheel'
+  [ngStyle]="{
+    transform: 'rotate(' + currentRotation + 'rad)'
+  }"
+  (click)="startRotation(5000)"
+>
+  <div class="palette">
+    <div
+      class="option"
+      *ngFor="let option of options"
+      [ngStyle]="{
+        clipPath: getSliceClipPath(options.length),
+        border: '235px solid ' + option.color,
+        transform: 'rotate(' + option.rotation + ')'
+      }">
+      <div style="position: absolute; top: -120px; left: 100px; transform: rotate(130deg)">
+        {{option.text}}
+      </div>
+    </div>
+  </div>
+<!--  <li class='slice'></li>-->
+  <!-- you can add more slices here -->
+</div>
+<p>Current time {{time}}</p>

@@ -1,0 +1,32 @@
+.spinning-wheel {
+  width: 500px;
+  height: 500px;
+  background: black;
+  margin: 200px 200px;
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+.slice {
+  width: 50px;
+  height: 50px;
+  background: aqua;
+  margin-left: 100px;
+}
+
+.palette {
+  height: 500px;
+  width: 500px;
+  position: relative;
+  display: inline-block;
+  overflow: hidden;
+}
+
+.option {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  border-radius: 50%;
+}
