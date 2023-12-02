@@ -2,7 +2,6 @@
   width: 500px;
   height: 500px;
   background: black;
-  margin: 200px 200px;
   border-radius: 50%;
   cursor: pointer;
 }
@@ -29,4 +28,18 @@
   right: 0;
   bottom: 0;
   border-radius: 50%;
+}
+
+.position-indicator {
+  border-top: 10px solid transparent;
+  border-bottom: 10px solid transparent;
+  border-right:20px solid black;
+  position: absolute;
+  top: 240px;
+  left: 480px;
+}
+
+.wheel-container {
+  position: relative;
+  margin: 200px 200px;
 }
