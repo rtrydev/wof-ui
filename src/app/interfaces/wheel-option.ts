@@ -1,6 +1,6 @@
 export interface WheelOption {
   text: string;
   color: string;
-  rotation: string;
+  rotation: number;
   textRotation: string;
 }
