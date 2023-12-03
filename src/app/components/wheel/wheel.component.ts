@@ -1,6 +1,8 @@
-import { Component, OnDestroy } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { WheelOption } from '../../interfaces/wheel-option';
+import { SchemaService } from '../../services/schema.service';
+import { WheelSchema } from '../../interfaces/wheel-schema';
 
 @Component({
   selector: 'app-wheel',
@@ -9,7 +11,7 @@ import { WheelOption } from '../../interfaces/wheel-option';
   templateUrl: './wheel.component.html',
   styleUrl: './wheel.component.scss'
 })
-export class WheelComponent implements OnDestroy {
+export class WheelComponent implements OnInit, OnDestroy {
   public currentRotation = 0;
   public time = 0;
 
@@ -51,34 +53,42 @@ export class WheelComponent implements OnDestroy {
     'DarkSalmon'
   ]
 
-  constructor() {
-    const optionCount = 5;
+  constructor(private schemaService: SchemaService) {
+  }
 
-    this.textMarginTop = -(this.textOffset - this.textSize) * Math.cos(Math.PI / optionCount);
-    this.textMarginLeft = (this.textOffset) * Math.sin(Math.PI / optionCount);
+  ngOnInit() {
+    this.schemaService.getSchema('f20ce0bc-918b-4df0-babb-0fbcc12f89c5').then(
+      schema => {
+        if (!schema) {
+          return;
+        }
 
-    this.options = this.generateOptions(optionCount);
+        this.loadOptions(schema);
+      }
+    )
   }
 
   ngOnDestroy() {
     this.clearRotationInterval();
   }
 
-  public generateOptions(optionCount: number): WheelOption[] {
-    const result = [];
+  public loadOptions(wheelSchema: WheelSchema): void {
+    const optionCount = wheelSchema.elements.length;
 
-    for (let i = 0; i < optionCount; i++) {
-      result.push({
-        text: `option${i + 1}`,
+    this.options = wheelSchema.elements.map(
+      (element, idx) => ({
+        id: element.id,
+        text: element.text,
         color: this.colors[
-            Math.floor(Math.random() * this.colors.length)
+          Math.floor(Math.random() * this.colors.length)
           ],
-        rotation: i * (2 * Math.PI / optionCount),
+        rotation: idx * (2 * Math.PI / optionCount),
         textRotation: `${-90 + (180 / optionCount)}deg`
       })
-    }
+    );
 
-    return result;
+    this.textMarginTop = -(this.textOffset - this.textSize) * Math.cos(Math.PI / optionCount);
+    this.textMarginLeft = (this.textOffset) * Math.sin(Math.PI / optionCount);
   }
 
   public startRotation(spinFor: number) {
