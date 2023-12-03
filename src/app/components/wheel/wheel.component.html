@@ -13,7 +13,7 @@
         [ngStyle]="{
         clipPath: getSliceClipPath(options.length),
         border: '235px solid ' + option.color,
-        transform: 'rotate(' + option.rotation + ')'
+        transform: 'rotate(' + option.rotation + 'rad)'
       }">
         <div
           [ngStyle]="{
@@ -30,3 +30,4 @@
   </div>
   <div class="position-indicator"></div>
 </div>
+<p>Result: {{currentResult?.text ?? 'none'}}</p>

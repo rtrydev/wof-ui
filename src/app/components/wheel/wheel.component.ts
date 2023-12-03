@@ -14,6 +14,7 @@ export class WheelComponent implements OnDestroy {
   public time = 0;
 
   public options: WheelOption[] = [];
+  public currentResult: WheelOption | null = null;
 
   public textSize = 22;
   public textOffset = 90;
@@ -72,7 +73,7 @@ export class WheelComponent implements OnDestroy {
         color: this.colors[
             Math.floor(Math.random() * this.colors.length)
           ],
-        rotation: `${i * (360 / optionCount)}deg`,
+        rotation: i * (2 * Math.PI / optionCount),
         textRotation: `${-90 + (180 / optionCount)}deg`
       })
     }
@@ -98,6 +99,7 @@ export class WheelComponent implements OnDestroy {
       }
 
       if (this.speedDivider > this.maxDivider) {
+        this.currentResult = this.getCurrentResult();
         this.clearRotationInterval();
       }
 
@@ -106,7 +108,6 @@ export class WheelComponent implements OnDestroy {
   }
 
   public getSliceClipPath(sliceCount: number): string {
-    console.log('slice count', sliceCount);
     if (sliceCount === 1) {
       return `
         circle(100%)
@@ -148,6 +149,31 @@ export class WheelComponent implements OnDestroy {
     `;
   }
 
+  private getCurrentResult(): WheelOption | null {
+    const offsetRotation = (5 / 2) * Math.PI - this.currentRotation;
+    const normalizedRotation = this.normalizeRotation(offsetRotation);
+
+    let currentIndex = -1;
+
+    for (const [idx, option] of this.options.entries()) {
+      if (idx === this.options.length - 1) {
+        currentIndex = idx;
+        break;
+      }
+
+      if (option.rotation < normalizedRotation && this.options[idx + 1].rotation > normalizedRotation) {
+        currentIndex = idx;
+        break;
+      }
+    }
+
+    if (currentIndex === -1) {
+      return null;
+    }
+
+    return this.options[currentIndex];
+  }
+
   private clearRotationInterval() {
     if (this.rotationInterval) {
       clearInterval(this.rotationInterval);
@@ -159,5 +185,21 @@ export class WheelComponent implements OnDestroy {
     const maxSpeed = 1.5;
 
     return Math.random() * (maxSpeed - minSpeed + 1) + minSpeed;
+  }
+
+  private normalizeRotation(rotation: number): number {
+    if (rotation < 0) {
+      const n = Math.ceil(rotation / -(2 * Math.PI));
+
+      return rotation + 2 * n * Math.PI;
+    }
+
+    if (rotation > 2 * Math.PI) {
+      const n = Math.floor(rotation / (2 * Math.PI));
+
+      return rotation - 2 * n * Math.PI;
+    }
+
+    return rotation;
   }
 }
