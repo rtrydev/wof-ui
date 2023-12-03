@@ -106,6 +106,25 @@ export class WheelComponent implements OnDestroy {
   }
 
   public getSliceClipPath(sliceCount: number): string {
+    console.log('slice count', sliceCount);
+    if (sliceCount === 1) {
+      return `
+        circle(100%)
+      `;
+    }
+
+    if (sliceCount === 2) {
+      return `
+        polygon(
+          50% 50%,
+          50% 0%,
+          100% 0%,
+          0% 999999%,
+          50% 50%
+        )
+      `;
+    }
+
     if (sliceCount <= 8) {
       return `
         polygon(
