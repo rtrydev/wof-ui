@@ -36,10 +36,21 @@
   border-right:20px solid black;
   position: absolute;
   top: 240px;
-  left: 480px;
+  right: 0px;
 }
 
 .wheel-container {
   position: relative;
-  margin: 200px 200px;
+}
+
+.wheel-boundary {
+  height: 500px;
+  width: 500px;
+  position: relative;
+  margin: 0px auto;
+}
+
+.wheel-option-text {
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }

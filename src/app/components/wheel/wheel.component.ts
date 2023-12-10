@@ -1,8 +1,6 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { WheelOption } from '../../interfaces/wheel-option';
-import { SchemaService } from '../../services/schema.service';
-import { WheelSchema } from '../../interfaces/wheel-schema';
 
 @Component({
   selector: 'app-wheel',
@@ -11,18 +9,27 @@ import { WheelSchema } from '../../interfaces/wheel-schema';
   templateUrl: './wheel.component.html',
   styleUrl: './wheel.component.scss'
 })
-export class WheelComponent implements OnInit, OnDestroy {
+export class WheelComponent implements OnDestroy {
   public currentRotation = 0;
   public time = 0;
 
+  @Input()
   public options: WheelOption[] = [];
+
+  @Input()
+  public textSize!: number;
+  @Input()
+  public textOffset!: number;
+
+  @Input()
+  public textMarginTop!: number;
+  @Input()
+  public textMarginLeft!: number;
+
+  @Input()
+  public spinTime!: number;
+
   public currentResult: WheelOption | null = null;
-
-  public textSize = 22;
-  public textOffset = 90;
-
-  public textMarginTop = 0;
-  public textMarginLeft = 0;
 
   private timeStep = 17;
   private maxDivider = 2048;
@@ -30,65 +37,10 @@ export class WheelComponent implements OnInit, OnDestroy {
   private speedDivider = 0;
   private rotationInterval: any;
 
-  private colors = [
-    'AliceBlue',
-    'Coral',
-    'DeepSkyBlue',
-    'Gold',
-    'HotPink',
-    'Lavender',
-    'MediumSeaGreen',
-    'NavajoWhite',
-    'Olive',
-    'PaleTurquoise',
-    'RoyalBlue',
-    'SlateGray',
-    'Teal',
-    'Violet',
-    'Wheat',
-    'YellowGreen',
-    'Azure',
-    'BurlyWood',
-    'Chocolate',
-    'DarkSalmon'
-  ]
-
-  constructor(private schemaService: SchemaService) {
-  }
-
-  ngOnInit() {
-    this.schemaService.getSchema('f20ce0bc-918b-4df0-babb-0fbcc12f89c5').then(
-      schema => {
-        if (!schema) {
-          return;
-        }
-
-        this.loadOptions(schema);
-      }
-    )
-  }
+  constructor() {}
 
   ngOnDestroy() {
     this.clearRotationInterval();
-  }
-
-  public loadOptions(wheelSchema: WheelSchema): void {
-    const optionCount = wheelSchema.elements.length;
-
-    this.options = wheelSchema.elements.map(
-      (element, idx) => ({
-        id: element.id,
-        text: element.text,
-        color: this.colors[
-          Math.floor(Math.random() * this.colors.length)
-          ],
-        rotation: idx * (2 * Math.PI / optionCount),
-        textRotation: `${-90 + (180 / optionCount)}deg`
-      })
-    );
-
-    this.textMarginTop = -(this.textOffset - this.textSize) * Math.cos(Math.PI / optionCount);
-    this.textMarginLeft = (this.textOffset) * Math.sin(Math.PI / optionCount);
   }
 
   public startRotation(spinFor: number) {
@@ -157,6 +109,19 @@ export class WheelComponent implements OnInit, OnDestroy {
         50% 50%
       )
     `;
+  }
+
+  public trimTextLength(text: string): string {
+    const maxLength = 16;
+
+    const addElipsis = text?.length > maxLength;
+    const resultText = text?.slice(0, maxLength);
+
+    if (!resultText) {
+      return '';
+    }
+
+    return addElipsis ? resultText + '...' : resultText;
   }
 
   private getCurrentResult(): WheelOption | null {

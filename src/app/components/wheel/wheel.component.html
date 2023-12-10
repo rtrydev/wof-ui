@@ -1,33 +1,36 @@
-<div class="wheel-container">
-  <div
-    class='spinning-wheel'
-    [ngStyle]="{
-    transform: 'rotate(' + currentRotation + 'rad)'
-  }"
-    (click)="startRotation(5000)"
-  >
-    <div class="palette">
-      <div
-        class="option"
-        *ngFor="let option of options"
-        [ngStyle]="{
-        clipPath: getSliceClipPath(options.length),
-        border: '235px solid ' + option.color,
-        transform: 'rotate(' + option.rotation + 'rad)'
-      }">
+<div class="wheel-container mb-4">
+  <div class="wheel-boundary">
+    <div
+      class='spinning-wheel'
+      [ngStyle]="{
+      transform: 'rotate(' + currentRotation + 'rad)'
+    }"
+      (click)="startRotation(10000)"
+    >
+      <div class="palette">
         <div
+          class="option"
+          *ngFor="let option of options"
           [ngStyle]="{
-          transform: 'rotate(' + option.textRotation + ')',
-          marginLeft: textMarginLeft + 'px',
-          marginTop: textMarginTop + 'px',
-          fontSize: textSize + 'px'
-        }"
-        >
-          {{option.text}}
+          clipPath: getSliceClipPath(options.length),
+          border: '235px solid ' + option.color,
+          transform: 'rotate(' + option.rotation + 'rad)'
+        }">
+          <div
+            class="wheel-option-text"
+            [ngStyle]="{
+            transform: 'rotate(' + option.textRotation + ')',
+            marginLeft: textMarginLeft + 'px',
+            marginTop: textMarginTop + 'px',
+            fontSize: textSize + 'px'
+          }"
+          >
+            {{trimTextLength(option.text)}}
+          </div>
         </div>
       </div>
     </div>
+    <div class="position-indicator"></div>
   </div>
-  <div class="position-indicator"></div>
 </div>
-<p>Result: {{currentResult?.text ?? 'none'}}</p>
+<p class="text-center" style="font-size: 22px;">Result: {{currentResult?.text ?? 'none'}}</p>

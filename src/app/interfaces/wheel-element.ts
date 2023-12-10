@@ -1,4 +1,4 @@
 export interface WheelElement {
-  id: string;
+  id?: string;
   text: string;
 }
