@@ -1,1 +1,28 @@
 /* You can add global styles to this file, and also import other style files */
+@import "bootstrap/scss/bootstrap";
+
+$body-bg: #212529;
+$body-color: #d6d6d6;
+
+.dark-card {
+  @extend .card;
+  @extend .shadow;
+  background: #25292D;
+}
+
+.bg-dark-secondary {
+  background: #25292D;
+}
+
+.action-icon {
+  cursor: pointer;
+}
+
+html body {
+  background-color: $body-bg;
+  color: $body-color;
+}
+
+:root {
+  color-scheme: dark;
+}
