@@ -1,0 +1,39 @@
+<nav class="navbar navbar-expand-lg navbar-dark header-card">
+    <div class="container-fluid">
+        <a href="/" class="d-flex align-items-center mb-lg-0 text-decoration-none">
+            <img class="bi me-2" width="40" height="32" src="/assets/logo.svg">
+        </a>
+        <a class="navbar-brand ms-2 me-2" href="#">Wheel of Fortune</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+                <li class="nav-item" *ngIf="!currentUser">
+                    <a class="nav-link active login-link" (click)="toggleLogin()">Login</a>
+                    <div id="wof-login-card" *ngIf="showLogin" style="position: fixed; right: 25px; z-index: 2" class="dark-card">
+                        <form class="d-flex flex-column align-items-center" (submit)="submit()">
+                            <label class="text-white mt-2" for="login-input">Login</label>
+                            <input id="login-input" name="username" [(ngModel)]="username" (ngModelChange)="inputChange()" type="text" class="mx-4 mt-2">
+                            <label class="text-white mt-2" for="password-input">Password</label>
+                            <input id="password-input" name="password" [(ngModel)]="password" (ngModelChange)="inputChange()" type="password" class="m-2">
+                            <div style="color: red" *ngIf="loginFailure">Invalid username or password.</div>
+                            <button
+                                type="submit"
+                                class="btn btn-success m-3"
+                                style="width: 100px; height: 40px;"
+                                [disabled]="loggingIn || !username || !password"
+                            >
+                                <div *ngIf="!loggingIn">Submit</div>
+                                <div class="spinner-border text-light" style="width: 1rem; height: 1rem;" role="status" *ngIf="loggingIn"></div>
+                            </button>
+                        </form>
+                    </div>
+                </li>
+                <li class="nav-item" *ngIf="currentUser">
+                    <a class="nav-link active">{{currentUser}}</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+  </nav>

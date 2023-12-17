@@ -1,0 +1,10 @@
+@import "../../../styles.scss";
+
+.header-card {
+  @extend .dark-card;
+  border-radius: 0;
+}
+
+.login-link {
+    cursor: pointer;
+}

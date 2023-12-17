@@ -19,6 +19,7 @@ import { WheelElementWrite } from '../../interfaces/wheel-element-write';
 })
 export class WheelCreatorComponent {
   public currentWheelId?: string;
+  public wheelName?: string;
   public options: WheelOption[] = [];
 
   public textSize = 20;
@@ -76,6 +77,7 @@ export class WheelCreatorComponent {
 
   public loadOptions(wheelSchema: WheelSchema): void {
     const optionCount = wheelSchema.elements.length;
+    this.wheelName = wheelSchema.name;
 
     this.options = wheelSchema.elements.map(
       (element, idx) => ({
@@ -107,6 +109,7 @@ export class WheelCreatorComponent {
     }
 
     const wheelData = {
+      name: this.wheelName,
       elements: this.optionInputs
         .filter(input => input.text)
         .map(input => ({

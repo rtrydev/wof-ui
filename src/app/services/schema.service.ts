@@ -8,7 +8,7 @@ import { WheelSchemaWrite } from '../interfaces/wheel-schema-write';
   providedIn: 'root'
 })
 export class SchemaService {
-  private apiUrl = 'http://localhost:3000/schemas';
+  private apiUrl = 'https://api.wof.rtrydev.com/schemas';
 
   constructor(private httpClient: HttpClient) { }
 

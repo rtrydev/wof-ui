@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="89mm"
+   height="71.999992mm"
+   viewBox="0 0 89 71.999992"
+   version="1.1"
+   id="svg5"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <defs
+     id="defs2" />
+  <g
+     id="layer1"
+     transform="translate(-57.000001,-28.000001)">
+    <rect
+       style="fill:none;fill-opacity:1;stroke:#a42acb;stroke-width:0;stroke-linejoin:miter;stroke-dasharray:none;stroke-opacity:1;paint-order:normal"
+       id="rect20489"
+       width="96.590065"
+       height="43.089581"
+       x="30.365137"
+       y="47.716648" />
+    <rect
+       style="fill:none;fill-opacity:1;stroke:#a42acb;stroke-width:0;stroke-linejoin:miter;stroke-dasharray:none;stroke-opacity:1;paint-order:normal"
+       id="rect20491"
+       width="16.194742"
+       height="9.5433283"
+       x="81.262901"
+       y="38.173321" />
+    <path
+       id="rect20493"
+       style="fill:none;fill-opacity:1;stroke:#a42acb;stroke-width:10;stroke-linejoin:miter;stroke-dasharray:none;stroke-opacity:1;paint-order:normal"
+       d="m 113.73724,65.646639 h 7.74682 c 8.41113,0 15.18253,-6.771402 15.18253,-15.182536 0,-8.411133 -6.7714,-15.182536 -15.18253,-15.182536 H 86.277938 Z" />
+    <path
+       id="rect20493-7"
+       style="fill:#a42acb;fill-opacity:1;stroke:none;stroke-width:19.9516;stroke-linejoin:miter;stroke-dasharray:none;stroke-opacity:1;paint-order:normal"
+       d="M 58.526853,30.304686 112.80653,91.341613 126.28674,91.453784 71.880682,30.281567 Z" />
+    <path
+       id="path20501"
+       style="fill:none;fill-opacity:1;stroke:#a42acb;stroke-width:10;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1;paint-order:normal"
+       d="m 95.936452,45.962155 c 74.419918,83.377085 37.209958,41.688543 0,0 z" />
+    <path
+       id="path20501-5"
+       style="fill:none;fill-opacity:1;stroke:#a42acb;stroke-width:10;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1;paint-order:normal"
+       d="m 79.003645,45.962158 c 74.419915,83.377082 37.209955,41.688543 0,0 z" />
+  </g>
+</svg>
