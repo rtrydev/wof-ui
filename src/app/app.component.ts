@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterOutlet } from '@angular/router';
-import { WheelCreatorComponent } from "./components/wheel-creator/wheel-creator.component";
+import { WheelEditorComponent } from "./components/wheel-editor/wheel-editor.component";
 import { HeaderComponent } from "./components/header/header.component";
 
 @Component({
@@ -12,7 +12,7 @@ import { HeaderComponent } from "./components/header/header.component";
     imports: [
         CommonModule,
         RouterOutlet,
-        WheelCreatorComponent,
+        WheelEditorComponent,
         HeaderComponent
     ]
 })

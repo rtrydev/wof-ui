@@ -1,12 +1,12 @@
 import { Routes } from '@angular/router';
-import { WheelCreatorComponent } from './components/wheel-creator/wheel-creator.component';
-import { NewWheelComponent } from './components/new-wheel/new-wheel.component';
+import { WheelEditorComponent } from './components/wheel-editor/wheel-editor.component';
+import { HomeComponent } from './components/home/home.component';
 
 export const routes: Routes = [
     {
-        path: 'wheel/:id', component: WheelCreatorComponent, pathMatch: 'full'
+        path: 'wheel/:id', component: WheelEditorComponent, pathMatch: 'full'
     },
     {
-        path: '', component: NewWheelComponent, pathMatch: 'full'
+        path: '', component: HomeComponent, pathMatch: 'full'
     }
 ];

@@ -1,19 +1,21 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { WheelOptionsComponent } from "../wheel-options/wheel-options.component";
+import { WheelOptionsComponent } from "../shared/wheel-options/wheel-options.component";
 import { WheelElementWrite } from '../../interfaces/wheel-element-write';
 import { SchemaService } from '../../services/schema.service';
 import { Router } from '@angular/router';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { WheelListComponent } from "../shared/wheel-list/wheel-list.component";
+import { WheelSchema } from '../../interfaces/wheel-schema';
 
 @Component({
-    selector: 'app-new-wheel',
+    selector: 'app-home',
     standalone: true,
-    templateUrl: './new-wheel.component.html',
-    styleUrl: './new-wheel.component.scss',
-    imports: [CommonModule, WheelOptionsComponent, ReactiveFormsModule, FormsModule]
+    templateUrl: './home.component.html',
+    styleUrl: './home.component.scss',
+    imports: [CommonModule, WheelOptionsComponent, ReactiveFormsModule, FormsModule, WheelListComponent]
 })
-export class NewWheelComponent {
+export class HomeComponent implements OnInit {
   public wheelName: string = '';
   public optionInputs: WheelElementWrite[] = [
     {text: 'Option 1'},
@@ -23,7 +25,15 @@ export class NewWheelComponent {
 
   public wheelProcessing = false;
 
+  public userSchemas: WheelSchema[] = [];
+
   constructor(private schemaService: SchemaService, private router: Router) {}
+
+  ngOnInit(): void {
+    this.schemaService.getSchemas().then(schemas => {
+      this.userSchemas = schemas;
+    });
+  }
 
   public addOption(): void {
     this.optionInputs.push({

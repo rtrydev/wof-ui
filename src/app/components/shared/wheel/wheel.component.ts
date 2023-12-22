@@ -1,6 +1,6 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { WheelOption } from '../../interfaces/wheel-option';
+import { WheelOption } from '../../../interfaces/wheel-option';
 
 @Component({
   selector: 'app-wheel',

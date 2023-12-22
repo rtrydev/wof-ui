@@ -1,4 +1,4 @@
-<h2 class="text-center pt-5">Create a wheel</h2>
+<h2 class="text-center pt-5 pb-3">Create a wheel</h2>
 <div class="d-flex justify-content-center mb-2">
   <input
     placeholder="Wheel name"
@@ -16,3 +16,4 @@
   (optionRemoved)="removeOption($event)"
   (wheelSubmitted)="createWheel()"
 ></app-wheel-options>
+<app-wheel-list [wheelSchemas]="userSchemas"></app-wheel-list>

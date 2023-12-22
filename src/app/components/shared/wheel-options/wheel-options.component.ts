@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { WheelElementWrite } from '../../interfaces/wheel-element-write';
+import { WheelElementWrite } from '../../../interfaces/wheel-element-write';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 @Component({

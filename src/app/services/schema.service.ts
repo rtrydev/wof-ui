@@ -12,6 +12,10 @@ export class SchemaService {
 
   constructor(private httpClient: HttpClient) { }
 
+  public async getSchemas(): Promise<WheelSchema[]> {
+    return lastValueFrom(this.httpClient.get<WheelSchema[]>(`${this.apiUrl}/`));
+  }
+
   public async getSchema(schemaId: string): Promise<WheelSchema | undefined> {
     return lastValueFrom(this.httpClient.get<WheelSchema>(`${this.apiUrl}/${schemaId}`));
   }

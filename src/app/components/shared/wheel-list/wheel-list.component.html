@@ -1,0 +1,5 @@
+<h3 class="text-center mt-4">Your wheels:</h3>
+<div *ngFor="let schema of wheelSchemas" class="dark-card my-2" style="width: 80%; margin-left: auto; margin-right: auto; cursor: pointer;">
+  <div class="text-white text-center p-3" style="font-size: 22px;" (click)="navigateToSchema(schema.id)">{{schema.name}}</div>
+</div>
+<p *ngIf="!wheelSchemas || wheelSchemas.length === 0" class="text-center text-white">Nothing here yet.</p>

@@ -1,6 +1,6 @@
 import { AfterContentInit, AfterViewInit, Component, HostListener } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { WheelComponent } from "../wheel/wheel.component";
+import { WheelComponent } from "../shared/wheel/wheel.component";
 import { SchemaService } from '../../services/schema.service';
 import { ActivatedRoute } from '@angular/router';
 import { take, tap } from 'rxjs';
@@ -9,16 +9,16 @@ import { WheelOption } from '../../interfaces/wheel-option';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { WheelElement } from '../../interfaces/wheel-element';
 import { WheelElementWrite } from '../../interfaces/wheel-element-write';
-import { WheelOptionsComponent } from "../wheel-options/wheel-options.component";
+import { WheelOptionsComponent } from "../shared/wheel-options/wheel-options.component";
 
 @Component({
-    selector: 'app-wheel-creator',
+    selector: 'app-wheel-editor',
     standalone: true,
-    templateUrl: './wheel-creator.component.html',
-    styleUrl: './wheel-creator.component.scss',
+    templateUrl: './wheel-editor.component.html',
+    styleUrl: './wheel-editor.component.scss',
     imports: [CommonModule, WheelComponent, ReactiveFormsModule, FormsModule, WheelOptionsComponent]
 })
-export class WheelCreatorComponent implements AfterContentInit {
+export class WheelEditorComponent implements AfterContentInit {
   public currentWheelId?: string;
   public wheelName?: string;
   public options: WheelOption[] = [];
