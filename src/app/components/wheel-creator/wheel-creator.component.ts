@@ -9,13 +9,14 @@ import { WheelOption } from '../../interfaces/wheel-option';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { WheelElement } from '../../interfaces/wheel-element';
 import { WheelElementWrite } from '../../interfaces/wheel-element-write';
+import { WheelOptionsComponent } from "../wheel-options/wheel-options.component";
 
 @Component({
     selector: 'app-wheel-creator',
     standalone: true,
     templateUrl: './wheel-creator.component.html',
     styleUrl: './wheel-creator.component.scss',
-    imports: [CommonModule, WheelComponent, ReactiveFormsModule, FormsModule]
+    imports: [CommonModule, WheelComponent, ReactiveFormsModule, FormsModule, WheelOptionsComponent]
 })
 export class WheelCreatorComponent implements AfterContentInit {
   public currentWheelId?: string;
@@ -33,6 +34,8 @@ export class WheelCreatorComponent implements AfterContentInit {
 
   public spinTime = 10000;
   public optionInputs: WheelElementWrite[] = [];
+
+  public wheelProcessing = false;
 
   public window = window;
 
@@ -95,6 +98,8 @@ export class WheelCreatorComponent implements AfterContentInit {
       return;
     }
 
+    this.wheelProcessing = true;
+
     const wheelData = {
       name: this.wheelName,
       elements: this.optionInputs
@@ -108,6 +113,8 @@ export class WheelCreatorComponent implements AfterContentInit {
       this.currentWheelId,
       wheelData
     );
+
+    this.wheelProcessing = false;
 
     this.loadWheel();
   }

@@ -1,1 +1,18 @@
-<h3>Nothing to see here yet.</h3>
+<h2 class="text-center pt-5">Create a wheel</h2>
+<div class="d-flex justify-content-center mb-2">
+  <input
+    placeholder="Wheel name"
+    [name]="'wheelName'"
+    class="wheel-form-option"
+    type="text"
+    [(ngModel)]="wheelName"
+  >
+</div>
+<app-wheel-options
+  [optionInputs]="optionInputs"
+  [submitActive]="!!wheelName && !wheelProcessing"
+  [submitProcessing]="wheelProcessing"
+  (optionAdded)="addOption()"
+  (optionRemoved)="removeOption($event)"
+  (wheelSubmitted)="createWheel()"
+></app-wheel-options>

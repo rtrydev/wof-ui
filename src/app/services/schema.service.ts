@@ -16,8 +16,8 @@ export class SchemaService {
     return lastValueFrom(this.httpClient.get<WheelSchema>(`${this.apiUrl}/${schemaId}`));
   }
 
-  public async createSchema(schema: WheelSchemaWrite): Promise<void> {
-    return lastValueFrom(this.httpClient.post<void>(this.apiUrl, schema));
+  public async createSchema(schema: WheelSchemaWrite): Promise<{id: string} | undefined> {
+    return lastValueFrom(this.httpClient.post<{id: string}>(`${this.apiUrl}/`, schema));
   }
 
   public async updateSchema(schemaId: string, schema: WheelSchemaWrite): Promise<void> {
