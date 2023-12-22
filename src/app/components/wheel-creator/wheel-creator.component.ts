@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { AfterContentInit, AfterViewInit, Component, HostListener } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { WheelComponent } from "../wheel/wheel.component";
 import { SchemaService } from '../../services/schema.service';
@@ -17,10 +17,13 @@ import { WheelElementWrite } from '../../interfaces/wheel-element-write';
     styleUrl: './wheel-creator.component.scss',
     imports: [CommonModule, WheelComponent, ReactiveFormsModule, FormsModule]
 })
-export class WheelCreatorComponent {
+export class WheelCreatorComponent implements AfterContentInit {
   public currentWheelId?: string;
   public wheelName?: string;
   public options: WheelOption[] = [];
+
+  public wheelSize = 500;
+  public calculatedWheelSize: number = this.wheelSize;
 
   public textSize = 20;
   public textOffset = 70;
@@ -31,7 +34,7 @@ export class WheelCreatorComponent {
   public spinTime = 10000;
   public optionInputs: WheelElementWrite[] = [];
 
-  private maxOptions = 30;
+  public window = window;
 
   private colors = [
     'AliceBlue',
@@ -73,6 +76,15 @@ export class WheelCreatorComponent {
           this.loadWheel();
       })
     ).subscribe();
+  }
+
+  ngAfterContentInit(): void {
+    this.onResize();
+  }
+
+  @HostListener('window:resize', ['$event'])
+  onResize() {
+    this.calculatedWheelSize = Math.min(window.innerWidth, this.wheelSize);
   }
 
   public loadOptions(wheelSchema: WheelSchema): void {
@@ -141,8 +153,8 @@ export class WheelCreatorComponent {
         }
 
         this.loadOptions(schema);
-    }
-  );
+      }
+    );
   }
 
   private loadFormOptions() {

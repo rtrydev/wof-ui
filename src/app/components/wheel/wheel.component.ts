@@ -27,6 +27,9 @@ export class WheelComponent implements OnDestroy {
   public textMarginLeft!: number;
 
   @Input()
+  public wheelSize: number = 500;
+
+  @Input()
   public spinTime!: number;
 
   public currentResult: WheelOption | null = null;
@@ -112,10 +115,11 @@ export class WheelComponent implements OnDestroy {
   }
 
   public trimTextLength(text: string): string {
-    const maxLength = 16;
-
+    const maxLength = Math.floor(this.wheelSize / (1.25 * this.textSize));
     const addElipsis = text?.length > maxLength;
-    const resultText = text?.slice(0, maxLength);
+
+    const textSlice = addElipsis ? maxLength - 3 : maxLength;
+    const resultText = text?.slice(0, textSlice);
 
     if (!resultText) {
       return '';

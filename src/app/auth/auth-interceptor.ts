@@ -10,7 +10,6 @@ export class AuthInterceptorService implements HttpInterceptor {
   constructor(private loginService: LoginService) { }
 
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-    console.log('intercepting');
     return of(this.loginService.currentToken).pipe(
         take(1),
         switchMap(token => {

@@ -1,19 +1,31 @@
 <div class="wheel-container mb-4">
-  <div class="wheel-boundary">
+  <div class="wheel-boundary"
+      [ngStyle]="{
+        width: wheelSize + 'px',
+        height: wheelSize + 'px'
+      }"
+  >
     <div
       class='spinning-wheel'
       [ngStyle]="{
-      transform: 'rotate(' + currentRotation + 'rad)'
+      transform: 'rotate(' + currentRotation + 'rad)',
+      width: wheelSize + 'px',
+      height: wheelSize + 'px'
     }"
       (click)="startRotation(10000)"
     >
-      <div class="palette">
+      <div class="palette"
+        [ngStyle]="{
+          width: wheelSize + 'px',
+          height: wheelSize + 'px'
+        }"
+      >
         <div
           class="option"
           *ngFor="let option of options"
           [ngStyle]="{
           clipPath: getSliceClipPath(options.length),
-          border: '235px solid ' + option.color,
+          border: (wheelSize / 2 - 15) + 'px solid ' + option.color,
           transform: 'rotate(' + option.rotation + 'rad)'
         }">
           <div
@@ -30,7 +42,10 @@
         </div>
       </div>
     </div>
-    <div class="position-indicator"></div>
+    <div
+      class="position-indicator"
+      [ngStyle]="{top: (wheelSize / 2 -10) + 'px'}"
+    ></div>
   </div>
 </div>
 <p class="text-center" style="font-size: 22px;">Result: {{currentResult?.text ?? 'none'}}</p>

@@ -1,21 +1,10 @@
 .spinning-wheel {
-  width: 500px;
-  height: 500px;
   background: black;
   border-radius: 50%;
   cursor: pointer;
 }
 
-.slice {
-  width: 50px;
-  height: 50px;
-  background: aqua;
-  margin-left: 100px;
-}
-
 .palette {
-  height: 500px;
-  width: 500px;
   position: relative;
   display: inline-block;
   overflow: hidden;
@@ -33,9 +22,8 @@
 .position-indicator {
   border-top: 10px solid transparent;
   border-bottom: 10px solid transparent;
-  border-right:20px solid black;
+  border-right: 20px solid black;
   position: absolute;
-  top: 240px;
   right: 0px;
 }
 
@@ -44,8 +32,6 @@
 }
 
 .wheel-boundary {
-  height: 500px;
-  width: 500px;
   position: relative;
   margin: 0px auto;
 }
