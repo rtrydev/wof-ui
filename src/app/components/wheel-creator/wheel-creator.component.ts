@@ -36,29 +36,6 @@ export class WheelCreatorComponent implements AfterContentInit {
 
   public window = window;
 
-  private colors = [
-    'AliceBlue',
-    'Coral',
-    'DeepSkyBlue',
-    'Gold',
-    'HotPink',
-    'Lavender',
-    'MediumSeaGreen',
-    'NavajoWhite',
-    'Olive',
-    'PaleTurquoise',
-    'RoyalBlue',
-    'SlateGray',
-    'Teal',
-    'Violet',
-    'Wheat',
-    'YellowGreen',
-    'Azure',
-    'BurlyWood',
-    'Chocolate',
-    'DarkSalmon'
-  ];
-
   constructor(
     private schemaService: SchemaService,
     private activatedRoute: ActivatedRoute
@@ -95,9 +72,7 @@ export class WheelCreatorComponent implements AfterContentInit {
       (element, idx) => ({
         id: element.id!,
         text: element.text,
-        color: this.colors[
-          Math.floor(Math.random() * this.colors.length)
-        ],
+        color: this.getColorForText(element.text),
         rotation: idx * (2 * Math.PI / optionCount),
         textRotation: `${-90 + (180 / optionCount)}deg`
       })
@@ -163,5 +138,34 @@ export class WheelCreatorComponent implements AfterContentInit {
     this.optionInputs = this.options.map(option => ({
         text: option.text
       }));
+  }
+
+  private getColorForText(text: string) : string {
+    const bytes = Array.from(text).map(char => char.charCodeAt(0));
+
+    const normalizer = Math.max(...bytes) / 192 + 64;
+
+    const avgByte = Math.floor((
+      bytes.reduce(
+        (a, b) => normalizer * (a % 255 + b % 255), 0
+      ) / bytes.length
+    ));
+
+    let firstSegment = 0;
+    let lastSegment = 0;
+
+    if (avgByte < 64) {
+      firstSegment = avgByte + 64;
+      lastSegment = avgByte + 128;
+    } else if (avgByte > 192) {
+      firstSegment = avgByte - 128;
+      lastSegment = avgByte - 64;
+    } else {
+      firstSegment = avgByte + 64;
+      lastSegment = avgByte - 64;
+    }
+
+    return `#${firstSegment.toString(16)}${avgByte.toString(16)}${lastSegment.toString(16)}`
+      .slice(0, 7).padEnd(7, '0');
   }
 }
