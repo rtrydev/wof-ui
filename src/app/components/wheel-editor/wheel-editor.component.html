@@ -14,6 +14,7 @@
     <app-wheel-options
         [optionInputs]="optionInputs"
         [submitProcessing]="wheelProcessing"
+        [submitActive]="!wheelProcessing"
         (optionAdded)="addOption()"
         (optionRemoved)="removeOption($event)"
         (wheelSubmitted)="updateWheel()"

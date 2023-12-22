@@ -1,19 +1,21 @@
 <h2 class="text-center pt-5 pb-3">Create a wheel</h2>
-<div class="d-flex justify-content-center mb-2">
-  <input
-    placeholder="Wheel name"
-    [name]="'wheelName'"
-    class="wheel-form-option"
-    type="text"
-    [(ngModel)]="wheelName"
-  >
+<div class="wheel-creator-container">
+  <div class="d-flex justify-content-center mb-2">
+    <input
+      placeholder="Wheel name"
+      [name]="'wheelName'"
+      class="wheel-form-option"
+      type="text"
+      [(ngModel)]="wheelName"
+    >
+  </div>
+  <app-wheel-options
+    [optionInputs]="optionInputs"
+    [submitActive]="!!wheelName && !wheelProcessing"
+    [submitProcessing]="wheelProcessing"
+    (optionAdded)="addOption()"
+    (optionRemoved)="removeOption($event)"
+    (wheelSubmitted)="createWheel()"
+  ></app-wheel-options>
+  <app-wheel-list [wheelSchemas]="userSchemas"></app-wheel-list>
 </div>
-<app-wheel-options
-  [optionInputs]="optionInputs"
-  [submitActive]="!!wheelName && !wheelProcessing"
-  [submitProcessing]="wheelProcessing"
-  (optionAdded)="addOption()"
-  (optionRemoved)="removeOption($event)"
-  (wheelSubmitted)="createWheel()"
-></app-wheel-options>
-<app-wheel-list [wheelSchemas]="userSchemas"></app-wheel-list>
