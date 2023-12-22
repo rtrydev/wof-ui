@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { LoginService } from '../../services/login.service';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -10,7 +10,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
   templateUrl: './header.component.html',
   styleUrl: './header.component.scss'
 })
-export class HeaderComponent {
+export class HeaderComponent implements OnInit {
   public showLogin = false;
   public currentUser: string | undefined;
 
@@ -24,6 +24,18 @@ export class HeaderComponent {
 
   constructor(private loginService: LoginService) {
     this.boundCallback = this.outsideClickCallback.bind(this);
+  }
+
+  ngOnInit(): void {
+    const token = localStorage.getItem('token');
+    const username = localStorage.getItem('username');
+
+    if (token && username) {
+      this.loginService.currentToken = token;
+      this.loginService.currentUser = username;
+
+      this.currentUser = username;
+    }
   }
 
   public async submit() {
@@ -59,6 +71,15 @@ export class HeaderComponent {
 
   public inputChange() {
     this.loginFailure = false;
+  }
+
+  public logout() {
+    this.loginService.currentToken = undefined;
+    this.loginService.currentUser = undefined;
+    this.currentUser = undefined;
+
+    localStorage.removeItem('token');
+    localStorage.removeItem('username');
   }
 
   private outsideClickCallback(event: MouseEvent) {

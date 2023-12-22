@@ -23,6 +23,10 @@ export class LoginService {
       if (result.token) {
         this.currentToken = result.token;
         this.currentUser = username;
+
+        localStorage.setItem('token', result.token);
+        localStorage.setItem('username', username);
+
         return true;
       }
 
