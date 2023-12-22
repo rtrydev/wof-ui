@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { WheelOptionsComponent } from "../shared/wheel-options/wheel-options.component";
 import { WheelElementWrite } from '../../interfaces/wheel-element-write';
@@ -7,6 +7,7 @@ import { Router } from '@angular/router';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { WheelListComponent } from "../shared/wheel-list/wheel-list.component";
 import { WheelSchema } from '../../interfaces/wheel-schema';
+import { LoginService } from '../../services/login.service';
 
 @Component({
     selector: 'app-home',
@@ -15,7 +16,7 @@ import { WheelSchema } from '../../interfaces/wheel-schema';
     styleUrl: './home.component.scss',
     imports: [CommonModule, WheelOptionsComponent, ReactiveFormsModule, FormsModule, WheelListComponent]
 })
-export class HomeComponent implements OnInit {
+export class HomeComponent implements OnInit, OnDestroy {
   public wheelName: string = '';
   public optionInputs: WheelElementWrite[] = [
     {text: 'Option 1'},
@@ -27,12 +28,22 @@ export class HomeComponent implements OnInit {
 
   public userSchemas: WheelSchema[] = [];
 
-  constructor(private schemaService: SchemaService, private router: Router) {}
+  private subs: any[] = [];
+
+  constructor(private schemaService: SchemaService, private loginService: LoginService, private router: Router) {}
 
   ngOnInit(): void {
-    this.schemaService.getSchemas().then(schemas => {
-      this.userSchemas = schemas;
-    });
+    this.loadSchemas();
+
+    this.subs.push(
+      this.loginService.loggedInSubject.subscribe(() => {
+        this.loadSchemas();
+      })
+    );
+  }
+
+  ngOnDestroy(): void {
+    this.subs.forEach(sub => sub.unsubscribe());
   }
 
   public addOption(): void {
@@ -72,5 +83,15 @@ export class HomeComponent implements OnInit {
 
   public removeOption(index: number): void {
     this.optionInputs.splice(index, 1);
+  }
+
+  private loadSchemas() {
+    if (!this.loginService.currentUser) {
+      return;
+    }
+
+    this.schemaService.getSchemas().then(schemas => {
+      this.userSchemas = schemas;
+    });
   }
 }

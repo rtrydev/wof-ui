@@ -74,12 +74,7 @@ export class HeaderComponent implements OnInit {
   }
 
   public logout() {
-    this.loginService.currentToken = undefined;
-    this.loginService.currentUser = undefined;
-    this.currentUser = undefined;
-
-    localStorage.removeItem('token');
-    localStorage.removeItem('username');
+    this.loginService.logout();
   }
 
   private outsideClickCallback(event: MouseEvent) {
