@@ -11,12 +11,17 @@
             [options]="options"
         ></app-wheel>
     </div>
+    <app-wheel-variable-list
+        [variables]="variables"
+        [availableSchemas]="userWheels"
+    ></app-wheel-variable-list>
     <app-wheel-options
         [optionInputs]="optionInputs"
         [submitProcessing]="wheelProcessing"
         [submitActive]="!wheelProcessing"
         (optionAdded)="addOption()"
         (optionRemoved)="removeOption($event)"
+        (optionChanged)="updateVariables()"
         (wheelSubmitted)="updateWheel()"
     ></app-wheel-options>
 </div>

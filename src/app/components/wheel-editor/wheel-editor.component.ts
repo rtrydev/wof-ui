@@ -10,18 +10,23 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { WheelElement } from '../../interfaces/wheel-element';
 import { WheelElementWrite } from '../../interfaces/wheel-element-write';
 import { WheelOptionsComponent } from "../shared/wheel-options/wheel-options.component";
+import { WheelVariable } from '../../interfaces/wheel-variable';
+import { WheelVariableListComponent } from "../shared/wheel-variable-list/wheel-variable-list.component";
 
 @Component({
     selector: 'app-wheel-editor',
     standalone: true,
     templateUrl: './wheel-editor.component.html',
     styleUrl: './wheel-editor.component.scss',
-    imports: [CommonModule, WheelComponent, ReactiveFormsModule, FormsModule, WheelOptionsComponent]
+    imports: [CommonModule, WheelComponent, ReactiveFormsModule, FormsModule, WheelOptionsComponent, WheelVariableListComponent]
 })
 export class WheelEditorComponent implements AfterContentInit {
   public currentWheelId?: string;
   public wheelName?: string;
   public options: WheelOption[] = [];
+  public variables: WheelVariable[] = [];
+
+  public userWheels: WheelSchema[] = [];
 
   public wheelSize = 500;
   public calculatedWheelSize: number = this.wheelSize;
@@ -56,6 +61,21 @@ export class WheelEditorComponent implements AfterContentInit {
           this.loadWheel();
       })
     ).subscribe();
+
+    this.schemaService.getSchemas().then(schemas => {
+      this.userWheels = schemas.filter(s => s.id !== this.currentWheelId).map(schema => ({
+        id: schema.id,
+        name: schema.name,
+        elements: schema.elements.map(e => ({
+          id: e.id,
+          text: e.text
+        })),
+        variables: schema.variables.map(v => ({
+          variableName: v.variable_name,
+          wheelId: v.wheel_id
+        }))
+      }));
+    });
   }
 
   ngAfterContentInit(): void {
@@ -106,7 +126,13 @@ export class WheelEditorComponent implements AfterContentInit {
         .filter(input => input.text)
         .map(input => ({
           text: input.text
-        }))
+        })),
+      variables: this.variables.map(
+        v => ({
+          variable_name: v.variableName,
+          wheel_id: v.wheelId
+        })
+      )
     };
 
     await this.schemaService.updateSchema(
@@ -123,6 +149,20 @@ export class WheelEditorComponent implements AfterContentInit {
     this.optionInputs.splice(index, 1);
   }
 
+  public updateVariables(): void {
+    const foundVariables = this.findVariables().map(v => v.toLowerCase());
+
+    foundVariables.forEach(variableName => {
+      if (!this.variables.some(variable => variable.variableName === variableName)) {
+        this.variables.push({
+          variableName
+        });
+      }
+    });
+
+    this.variables = this.variables.filter(v => foundVariables.includes(v.variableName));
+  }
+
   private loadWheel() {
     if (!this.currentWheelId) {
       return;
@@ -134,9 +174,27 @@ export class WheelEditorComponent implements AfterContentInit {
           return;
         }
 
-        this.loadOptions(schema);
+        const mappedSchema: WheelSchema = {
+          id: schema.id,
+          name: schema.name,
+          elements: schema.elements.map(e => ({
+            id: e.id,
+            text: e.text
+          })),
+          variables: schema.variables.map(v => ({
+            variableName: v.variable_name,
+            wheelId: v.wheel_id
+          }))
+        };
+
+        this.loadOptions(mappedSchema);
+        this.loadVariables(mappedSchema);
       }
     );
+  }
+
+  private loadVariables(wheelSchema: WheelSchema): void {
+    this.variables = wheelSchema.variables || [];
   }
 
   private loadFormOptions() {
@@ -174,5 +232,19 @@ export class WheelEditorComponent implements AfterContentInit {
 
     return `#${firstSegment.toString(16)}${avgByte.toString(16)}${lastSegment.toString(16)}`
       .slice(0, 7).padEnd(7, '0');
+  }
+
+  private findVariables(): string[] {
+    const variables: Set<string> = new Set();
+
+    this.optionInputs.forEach(option => {
+      const foundVariables = option.text.match(/{[a-zA-Z0-9]+}/gm)?.map(v => v.replace(/[{}]/g, '')) || [];
+
+      foundVariables.forEach(v => {
+        variables.add(v);
+      })
+    });
+
+    return Array.from(variables);
   }
 }

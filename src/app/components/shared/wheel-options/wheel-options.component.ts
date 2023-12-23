@@ -28,4 +28,11 @@ export class WheelOptionsComponent {
 
   @Output()
   public wheelSubmitted: EventEmitter<void> = new EventEmitter();
+
+  @Output()
+  public optionChanged: EventEmitter<void> = new EventEmitter();
+
+  public changeCallback() {
+    this.optionChanged.emit();
+  }
 }

@@ -25,6 +25,17 @@ html body {
   overflow-x: hidden;
 }
 
+select {
+  background: #2B2A33 !important;
+  color: $body-color !important;
+  border-color: #8C8C99 !important;
+  cursor: pointer;
+}
+
+select:hover {
+  border-color: #B1B1B9 !important;
+}
+
 :root {
   color-scheme: dark;
 }

@@ -91,7 +91,18 @@ export class HomeComponent implements OnInit, OnDestroy {
     }
 
     this.schemaService.getSchemas().then(schemas => {
-      this.userSchemas = schemas;
+      this.userSchemas = schemas.map(schema => ({
+        id: schema.id,
+        name: schema.name,
+        elements: schema.elements.map(e => ({
+          id: e.id,
+          text: e.text
+        })),
+        variables: schema.variables.map(v => ({
+          variableName: v.variable_name,
+          wheelId: v.wheel_id
+        }))
+      }));
     });
   }
 }

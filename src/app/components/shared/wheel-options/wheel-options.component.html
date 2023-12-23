@@ -6,6 +6,7 @@
       class="wheel-form-option"
       type="text"
       [(ngModel)]="optionInput.text"
+      (ngModelChange)="changeCallback()"
     >
     <button type="button" (click)="optionRemoved.emit(i)" class="btn btn-warning ms-2">x</button>
   </div>

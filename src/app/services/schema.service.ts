@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { WheelSchema } from '../interfaces/wheel-schema';
 import { lastValueFrom } from 'rxjs';
 import { WheelSchemaWrite } from '../interfaces/wheel-schema-write';
+import { WheelSchemaRead } from '../interfaces/wheel-schema-read';
 
 @Injectable({
   providedIn: 'root'
@@ -12,12 +13,12 @@ export class SchemaService {
 
   constructor(private httpClient: HttpClient) { }
 
-  public async getSchemas(): Promise<WheelSchema[]> {
-    return lastValueFrom(this.httpClient.get<WheelSchema[]>(`${this.apiUrl}/`));
+  public async getSchemas(): Promise<WheelSchemaRead[]> {
+    return lastValueFrom(this.httpClient.get<WheelSchemaRead[]>(`${this.apiUrl}/`));
   }
 
-  public async getSchema(schemaId: string): Promise<WheelSchema | undefined> {
-    return lastValueFrom(this.httpClient.get<WheelSchema>(`${this.apiUrl}/${schemaId}`));
+  public async getSchema(schemaId: string): Promise<WheelSchemaRead | undefined> {
+    return lastValueFrom(this.httpClient.get<WheelSchemaRead>(`${this.apiUrl}/${schemaId}`));
   }
 
   public async createSchema(schema: WheelSchemaWrite): Promise<{id: string} | undefined> {
