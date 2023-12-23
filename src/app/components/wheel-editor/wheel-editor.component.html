@@ -29,7 +29,7 @@
 
 <div *ngIf="showResult" style="position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: #000000aa; z-index: 2">
     <div class="d-flex justify-content-center align-items-center h-100">
-        <div class="dark-card p-3" style="max-height: 80vh; max-width: 95vw; overflow-y: scroll;" [ngStyle]="{minWidth: calculatedWheelSize + 'px'}">
+        <div class="dark-card p-3" style="max-height: 80vh; max-width: 95vw; overflow-y: scroll; overflow-x: hidden;" [ngStyle]="{minWidth: calculatedWheelSize + 'px'}">
             <p class="text-white text-center p-3" style="font-size: 22px;">{{currentResult}}</p>
             <div class="d-flex flex-wrap justify-content-center">
                 <div *ngFor="let variable of variablesInCurrentResult">
