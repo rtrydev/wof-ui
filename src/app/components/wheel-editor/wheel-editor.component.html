@@ -12,10 +12,6 @@
             (resultSelected)="resultSelected($event)"
         ></app-wheel>
     </div>
-    <app-wheel-variable-list
-        [variables]="variables"
-        [availableSchemas]="userWheels"
-    ></app-wheel-variable-list>
     <app-wheel-options
         [optionInputs]="optionInputs"
         [submitProcessing]="wheelProcessing"
@@ -25,24 +21,32 @@
         (optionChanged)="updateVariables()"
         (wheelSubmitted)="updateWheel()"
     ></app-wheel-options>
+    <app-wheel-variable-list
+        [variables]="variables"
+        [availableSchemas]="userWheels"
+    ></app-wheel-variable-list>
 </div>
 
 <div *ngIf="showResult" style="position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: #000000aa; z-index: 2">
     <div class="d-flex justify-content-center align-items-center h-100">
-        <div class="dark-card p-3" [ngStyle]="{minWidth: calculatedWheelSize + 'px'}">
+        <div class="dark-card p-3" style="max-height: 80vh; max-width: 95vw; overflow-y: scroll;" [ngStyle]="{minWidth: calculatedWheelSize + 'px'}">
             <p class="text-white text-center p-3" style="font-size: 22px;">{{currentResult}}</p>
-            <div *ngFor="let variable of variablesInCurrentResult">
-                <h3 style="color: #d6d6d6" class="text-center p-2">{{getWheelNameForId(variable.wheelId!)}}</h3>
-                <app-wheel
-                    [wheelSize]="calculatedWheelSize"
-                    [textSize]="textSize"
-                    [textOffset]="textOffset"
-                    [textMarginTop]="getTextMarginTopForWheelId(variable.wheelId!)"
-                    [textMarginLeft]="getTextMarginLeftForWheelId(variable.wheelId!)"
-                    [spinTime]="spinTime"
-                    [options]="getOptionsForWheelId(variable.wheelId!)"
-                    (resultSelected)="resolveVariableInCurrentResult(variable.variableName, $event)"
-                ></app-wheel>
+            <div class="d-flex flex-wrap justify-content-center">
+                <div *ngFor="let variable of variablesInCurrentResult">
+                    <div class="p-2">
+                        <h3 style="color: #d6d6d6" class="text-center p-2">{{getWheelNameForId(variable.wheelId!)}}</h3>
+                        <app-wheel
+                            [wheelSize]="calculatedWheelSize / 2"
+                            [textSize]="textSize"
+                            [textOffset]="textOffset"
+                            [textMarginTop]="getTextMarginTopForWheelId(variable.wheelId!)"
+                            [textMarginLeft]="getTextMarginLeftForWheelId(variable.wheelId!)"
+                            [spinTime]="spinTime"
+                            [options]="getOptionsForWheelId(variable.wheelId!)"
+                            (resultSelected)="resolveVariableInCurrentResult(variable.variableName, $event)"
+                        ></app-wheel>
+                    </div>
+                </div>
             </div>
             <button (click)="showResult = false;" class="btn btn-success" style="margin-left: auto; margin-right: auto;">Close</button>
         </div>
