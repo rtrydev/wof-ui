@@ -151,6 +151,7 @@ export class WheelEditorComponent implements AfterContentInit {
 
   public removeOption(index: number): void {
     this.optionInputs.splice(index, 1);
+    this.updateVariables();
   }
 
   public updateVariables(): void {
