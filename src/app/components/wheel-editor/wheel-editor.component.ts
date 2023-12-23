@@ -42,6 +42,10 @@ export class WheelEditorComponent implements AfterContentInit {
 
   public wheelProcessing = false;
 
+  public showResult = false;
+  public currentResult?: string;
+  public variablesInCurrentResult?: WheelVariable[];
+
   public window = window;
 
   constructor(
@@ -163,6 +167,64 @@ export class WheelEditorComponent implements AfterContentInit {
     this.variables = this.variables.filter(v => foundVariables.includes(v.variableName));
   }
 
+  public resultSelected(result: string): void {
+    this.currentResult = result;
+
+    this.variablesInCurrentResult = this.findVariablesInString(this.currentResult)
+      .filter(v => !!this.variables.find(vr => vr.variableName === v)?.wheelId)
+      .map(v => this.variables.find(vr => vr.variableName === v)!);
+
+      this.showResult = true;
+  }
+
+  public getOptionsForWheelId(wheelId: string): WheelOption[] {
+    const wheel = this.userWheels.find(wheel => wheel.id === wheelId);
+
+    if (!wheel) {
+      return [];
+    }
+
+    return this.loadOptionsFromElements(wheel.elements);
+  }
+
+  public getTextMarginTopForWheelId(wheelId: string): number {
+    const wheel = this.userWheels.find(wheel => wheel.id === wheelId);
+
+    if (!wheel) {
+      return 0;
+    }
+
+    return -(this.textOffset - this.textSize) * Math.cos(Math.PI / wheel.elements.length);
+  }
+
+  public getTextMarginLeftForWheelId(wheelId: string): number {
+    const wheel = this.userWheels.find(wheel => wheel.id === wheelId);
+
+    if (!wheel) {
+      return 0;
+    }
+
+    return (this.textOffset) * Math.sin(Math.PI / wheel.elements.length);
+  }
+
+  public resolveVariableInCurrentResult(variable: string, value: string): void {
+    if (!this.currentResult) {
+      return;
+    }
+
+    this.currentResult = this.currentResult.replaceAll(`{${variable}}`, value);
+  }
+
+  public getWheelNameForId(wheelId: string): string {
+    const wheel = this.userWheels.find(wheel => wheel.id === wheelId);
+
+    if (!wheel) {
+      return '';
+    }
+
+    return wheel.name;
+  }
+
   private loadWheel() {
     if (!this.currentWheelId) {
       return;
@@ -238,7 +300,8 @@ export class WheelEditorComponent implements AfterContentInit {
     const variables: Set<string> = new Set();
 
     this.optionInputs.forEach(option => {
-      const foundVariables = option.text.match(/{[a-zA-Z0-9]+}/gm)?.map(v => v.replace(/[{}]/g, '')) || [];
+      const foundVariables = this.findVariablesInString(option.text);
+
 
       foundVariables.forEach(v => {
         variables.add(v);
@@ -246,5 +309,23 @@ export class WheelEditorComponent implements AfterContentInit {
     });
 
     return Array.from(variables);
+  }
+
+  private findVariablesInString(str: string): string[] {
+    return str.match(/{[a-zA-Z0-9]+}/gm)?.map(v => v.replace(/[{}]/g, '')) || [];
+  }
+
+  private loadOptionsFromElements(wheelElements: WheelElement[]): WheelOption[] {
+    const optionCount = wheelElements.length;
+
+    return wheelElements.map(
+      (element, idx) => ({
+        id: element.id!,
+        text: element.text,
+        color: this.getColorForText(element.text),
+        rotation: idx * (2 * Math.PI / optionCount),
+        textRotation: `${-90 + (180 / optionCount)}deg`
+      })
+    );
   }
 }

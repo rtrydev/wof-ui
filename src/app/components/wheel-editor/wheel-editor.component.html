@@ -9,6 +9,7 @@
             [textMarginLeft]="textMarginLeft"
             [spinTime]="spinTime"
             [options]="options"
+            (resultSelected)="resultSelected($event)"
         ></app-wheel>
     </div>
     <app-wheel-variable-list
@@ -24,4 +25,26 @@
         (optionChanged)="updateVariables()"
         (wheelSubmitted)="updateWheel()"
     ></app-wheel-options>
+</div>
+
+<div *ngIf="showResult" style="position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: #000000aa; z-index: 2">
+    <div class="d-flex justify-content-center align-items-center h-100">
+        <div class="dark-card p-3" [ngStyle]="{minWidth: calculatedWheelSize + 'px'}">
+            <p class="text-white text-center p-3" style="font-size: 22px;">{{currentResult}}</p>
+            <div *ngFor="let variable of variablesInCurrentResult">
+                <h3 style="color: #d6d6d6" class="text-center p-2">{{getWheelNameForId(variable.wheelId!)}}</h3>
+                <app-wheel
+                    [wheelSize]="calculatedWheelSize"
+                    [textSize]="textSize"
+                    [textOffset]="textOffset"
+                    [textMarginTop]="getTextMarginTopForWheelId(variable.wheelId!)"
+                    [textMarginLeft]="getTextMarginLeftForWheelId(variable.wheelId!)"
+                    [spinTime]="spinTime"
+                    [options]="getOptionsForWheelId(variable.wheelId!)"
+                    (resultSelected)="resolveVariableInCurrentResult(variable.variableName, $event)"
+                ></app-wheel>
+            </div>
+            <button (click)="showResult = false;" class="btn btn-success" style="margin-left: auto; margin-right: auto;">Close</button>
+        </div>
+    </div>
 </div>

@@ -1,4 +1,4 @@
-import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { WheelOption } from '../../../interfaces/wheel-option';
 
@@ -31,6 +31,9 @@ export class WheelComponent implements OnDestroy {
 
   @Input()
   public spinTime!: number;
+
+  @Output()
+  public resultSelected: EventEmitter<string> = new EventEmitter();
 
   public currentResult: WheelOption | null = null;
 
@@ -65,6 +68,7 @@ export class WheelComponent implements OnDestroy {
 
       if (this.speedDivider > this.maxDivider) {
         this.currentResult = this.getCurrentResult();
+        this.resultSelected.emit(this.currentResult?.text);
         this.clearRotationInterval();
       }
 
