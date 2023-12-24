@@ -1,5 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable, NgZone } from '@angular/core';
+import { Router } from '@angular/router';
 import { Subject, lastValueFrom } from 'rxjs';
 
 @Injectable({
@@ -13,7 +14,7 @@ export class LoginService {
 
   private apiUrl = 'https://api.wof.rtrydev.com/auth';
 
-  constructor(private httpClient: HttpClient, private zone: NgZone) { }
+  constructor(private httpClient: HttpClient, private zone: NgZone, private router: Router) { }
 
   public async login(username: string, password: string): Promise<boolean> {
     try {
@@ -46,8 +47,10 @@ export class LoginService {
     this.currentToken = undefined;
     this.currentUser = undefined;
 
-    this.zone.runOutsideAngular(() => {
-      location.reload();
+    this.router.navigateByUrl('/').then(() => {
+      this.zone.runOutsideAngular(() => {
+        location.reload();
+      });
     });
   }
 }
