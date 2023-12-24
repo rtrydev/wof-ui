@@ -41,6 +41,12 @@ export class LoginService {
   }
 
   public logout() {
+    const wasLogged = !!this.currentToken || !!this.currentUser;
+
+    if (!wasLogged) {
+      return;
+    }
+
     localStorage.removeItem('token');
     localStorage.removeItem('username');
 
