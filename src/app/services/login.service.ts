@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
-import { Injectable, NgZone } from '@angular/core';
+import { Injectable, NgZone, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { Subject, lastValueFrom } from 'rxjs';
+import { Subject, timer, lastValueFrom, switchMap, of, Observable, interval, tap } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -59,4 +59,21 @@ export class LoginService {
       });
     });
   }
+
+  public registerRefresh(immediate: boolean): Observable<void> {
+    const timeInterval = 15 * 60 * 1000;
+    const intervalProvider = immediate ? timer(0, timeInterval) : interval(timeInterval);
+
+    return intervalProvider.pipe(
+      switchMap(() => this.httpClient.get<{token: string}>(`${this.apiUrl}/refresh`)),
+      switchMap((result: {token: string | null}) => {
+        if (result.token) {
+          this.currentToken = result.token;
+          localStorage.setItem('token', result.token);
+        }
+
+        return of();
+      })
+    );
+  };
 }

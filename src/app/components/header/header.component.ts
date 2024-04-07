@@ -1,7 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { LoginService } from '../../services/login.service';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-header',
@@ -10,7 +11,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
   templateUrl: './header.component.html',
   styleUrl: './header.component.scss'
 })
-export class HeaderComponent implements OnInit {
+export class HeaderComponent implements OnInit, OnDestroy {
   public showLogin = false;
   public currentUser: string | undefined;
 
@@ -20,6 +21,7 @@ export class HeaderComponent implements OnInit {
   public loggingIn = false;
   public loginFailure = false;
 
+  private refreshSub?: Subscription;
   private boundCallback: any;
 
   constructor(private loginService: LoginService) {
@@ -35,7 +37,14 @@ export class HeaderComponent implements OnInit {
       this.loginService.currentUser = username;
 
       this.currentUser = username;
+
+      this.refreshSub?.unsubscribe();
+      this.refreshSub = this.loginService.registerRefresh(true).subscribe();
     }
+  }
+
+  ngOnDestroy(): void {
+    this.refreshSub?.unsubscribe();
   }
 
   public async submit() {
@@ -100,5 +109,7 @@ export class HeaderComponent implements OnInit {
     document.removeEventListener('click', this.boundCallback);
     this.showLogin = false;
     this.currentUser = this.loginService.currentUser;
+    this.refreshSub?.unsubscribe();
+    this.refreshSub = this.loginService.registerRefresh(false).subscribe();
   }
 }
