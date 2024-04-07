@@ -14,7 +14,9 @@ export class WheelComponent implements OnDestroy {
   public time = 0;
 
   @Input()
-  public options: WheelOption[] = [];
+  public set options(options: WheelOption[]) {
+    this.wheelOptions = options.filter(o => !o.locked);
+  }
 
   @Input()
   public textSize!: number;
@@ -35,6 +37,7 @@ export class WheelComponent implements OnDestroy {
   @Output()
   public resultSelected: EventEmitter<string> = new EventEmitter();
 
+  public wheelOptions: WheelOption[] = [];
   public currentResult: WheelOption | null = null;
 
   private timeStep = 17;
@@ -138,13 +141,13 @@ export class WheelComponent implements OnDestroy {
 
     let currentIndex = -1;
 
-    for (const [idx, option] of this.options.entries()) {
-      if (idx === this.options.length - 1) {
+    for (const [idx, option] of this.wheelOptions.entries()) {
+      if (idx === this.wheelOptions.length - 1) {
         currentIndex = idx;
         break;
       }
 
-      if (option.rotation < normalizedRotation && this.options[idx + 1].rotation > normalizedRotation) {
+      if (option.rotation < normalizedRotation && this.wheelOptions[idx + 1].rotation > normalizedRotation) {
         currentIndex = idx;
         break;
       }
@@ -154,7 +157,7 @@ export class WheelComponent implements OnDestroy {
       return null;
     }
 
-    return this.options[currentIndex];
+    return this.wheelOptions[currentIndex];
   }
 
   private clearRotationInterval() {

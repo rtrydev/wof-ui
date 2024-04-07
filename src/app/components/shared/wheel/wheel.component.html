@@ -22,9 +22,9 @@
       >
         <div
           class="option"
-          *ngFor="let option of options"
+          *ngFor="let option of wheelOptions"
           [ngStyle]="{
-          clipPath: getSliceClipPath(options.length),
+          clipPath: getSliceClipPath(wheelOptions.length),
           border: (wheelSize / 2 - 15) + 'px solid ' + option.color,
           transform: 'rotate(' + option.rotation + 'rad)'
         }">

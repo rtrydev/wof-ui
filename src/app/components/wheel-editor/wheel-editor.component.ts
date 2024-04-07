@@ -51,9 +51,7 @@ export class WheelEditorComponent implements AfterContentInit {
   constructor(
     private schemaService: SchemaService,
     private activatedRoute: ActivatedRoute
-  ) {
-    this.loadFormOptions();
-  }
+  ) { }
 
   ngOnInit() {
     this.activatedRoute.params.pipe(
@@ -72,7 +70,8 @@ export class WheelEditorComponent implements AfterContentInit {
         name: schema.name,
         elements: schema.elements.map(e => ({
           id: e.id,
-          text: e.text
+          text: e.text,
+          locked: e.locked ?? false
         })),
         variables: schema.variables.map(v => ({
           variableName: v.variable_name,
@@ -92,13 +91,14 @@ export class WheelEditorComponent implements AfterContentInit {
   }
 
   public loadOptions(wheelSchema: WheelSchema): void {
-    const optionCount = wheelSchema.elements.length;
+    const optionCount = wheelSchema.elements.filter(e => !e.locked).length;
     this.wheelName = wheelSchema.name;
 
-    this.options = wheelSchema.elements.map(
+    this.options = wheelSchema.elements.filter(e => !e.locked).map(
       (element, idx) => ({
         id: element.id!,
         text: element.text,
+        locked: element.locked,
         color: this.getColorForText(element.text),
         rotation: idx * (2 * Math.PI / optionCount),
         textRotation: `${-90 + (180 / optionCount)}deg`
@@ -108,12 +108,24 @@ export class WheelEditorComponent implements AfterContentInit {
     this.textMarginTop = -(this.textOffset - this.textSize) * Math.cos(Math.PI / optionCount);
     this.textMarginLeft = (this.textOffset) * Math.sin(Math.PI / optionCount);
 
-    this.loadFormOptions();
+    this.loadFormOptions(
+      wheelSchema.elements.map(
+        (element, idx) => ({
+          id: element.id!,
+          text: element.text,
+          locked: element.locked,
+          color: this.getColorForText(element.text),
+          rotation: idx * (2 * Math.PI / optionCount),
+          textRotation: `${-90 + (180 / optionCount)}deg`
+        })
+      )
+    );
   }
 
   public addOption(): void {
     this.optionInputs.push({
-      text: ''
+      text: '',
+      locked: false
     });
   }
 
@@ -129,7 +141,8 @@ export class WheelEditorComponent implements AfterContentInit {
       elements: this.optionInputs
         .filter(input => input.text)
         .map(input => ({
-          text: input.text
+          text: input.text,
+          locked: input.locked
         })),
       variables: this.variables.map(
         v => ({
@@ -152,6 +165,14 @@ export class WheelEditorComponent implements AfterContentInit {
   public removeOption(index: number): void {
     this.optionInputs.splice(index, 1);
     this.updateVariables();
+  }
+
+  public lockOption(index: number): void {
+    if (!this.optionInputs[index]) {
+      return;
+    }
+
+    this.optionInputs[index].locked = !this.optionInputs[index].locked;
   }
 
   public updateVariables(): void {
@@ -195,7 +216,7 @@ export class WheelEditorComponent implements AfterContentInit {
       return 0;
     }
 
-    return -(this.textOffset - this.textSize) * Math.cos(Math.PI / wheel.elements.length);
+    return -(this.textOffset - this.textSize) * Math.cos(Math.PI / wheel.elements.filter(e => !e.locked).length);
   }
 
   public getTextMarginLeftForWheelId(wheelId: string): number {
@@ -205,7 +226,7 @@ export class WheelEditorComponent implements AfterContentInit {
       return 0;
     }
 
-    return (this.textOffset) * Math.sin(Math.PI / wheel.elements.length);
+    return (this.textOffset) * Math.sin(Math.PI / wheel.elements.filter(e => !e.locked).length);
   }
 
   public resolveVariableInCurrentResult(variable: string, value: string): void {
@@ -242,7 +263,8 @@ export class WheelEditorComponent implements AfterContentInit {
           name: schema.name,
           elements: schema.elements.map(e => ({
             id: e.id,
-            text: e.text
+            text: e.text,
+            locked: e.locked ?? false
           })),
           variables: schema.variables.map(v => ({
             variableName: v.variable_name,
@@ -260,11 +282,10 @@ export class WheelEditorComponent implements AfterContentInit {
     this.variables = wheelSchema.variables || [];
   }
 
-  private loadFormOptions() {
-    this.optionInputs = [];
-
-    this.optionInputs = this.options.map(option => ({
-        text: option.text
+  private loadFormOptions(options: WheelOption[]) {
+    this.optionInputs = options.map(option => ({
+        text: option.text,
+        locked: option.locked
       }));
   }
 
@@ -317,12 +338,13 @@ export class WheelEditorComponent implements AfterContentInit {
   }
 
   private loadOptionsFromElements(wheelElements: WheelElement[]): WheelOption[] {
-    const optionCount = wheelElements.length;
+    const optionCount = wheelElements.filter(e => !e.locked).length;
 
-    return wheelElements.map(
+    return wheelElements.filter(e => !e.locked).map(
       (element, idx) => ({
         id: element.id!,
         text: element.text,
+        locked: element.locked,
         color: this.getColorForText(element.text),
         rotation: idx * (2 * Math.PI / optionCount),
         textRotation: `${-90 + (180 / optionCount)}deg`

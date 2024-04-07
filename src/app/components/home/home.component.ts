@@ -19,9 +19,9 @@ import { LoginService } from '../../services/login.service';
 export class HomeComponent implements OnInit, OnDestroy {
   public wheelName: string = '';
   public optionInputs: WheelElementWrite[] = [
-    {text: 'Option 1'},
-    {text: 'Option 2'},
-    {text: 'Option 3'},
+    {text: 'Option 1', locked: false},
+    {text: 'Option 2', locked: false},
+    {text: 'Option 3', locked: false},
   ];
 
   public wheelProcessing = false;
@@ -48,7 +48,8 @@ export class HomeComponent implements OnInit, OnDestroy {
 
   public addOption(): void {
     this.optionInputs.push({
-      text: ''
+      text: '',
+      locked: false
     });
   }
 
@@ -64,7 +65,8 @@ export class HomeComponent implements OnInit, OnDestroy {
       elements: this.optionInputs
         .filter(input => input.text)
         .map(input => ({
-          text: input.text
+          text: input.text,
+          locked: input.locked
         }))
     };
 
@@ -96,7 +98,8 @@ export class HomeComponent implements OnInit, OnDestroy {
         name: schema.name,
         elements: schema.elements.map(e => ({
           id: e.id,
-          text: e.text
+          text: e.text,
+          locked: e.locked
         })),
         variables: schema.variables.map(v => ({
           variableName: v.variable_name,

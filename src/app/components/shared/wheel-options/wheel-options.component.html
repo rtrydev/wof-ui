@@ -8,7 +8,13 @@
       [(ngModel)]="optionInput.text"
       (ngModelChange)="changeCallback()"
     >
-    <button type="button" (click)="optionRemoved.emit(i)" class="btn btn-warning ms-2">x</button>
+    <button type="button" (click)="optionRemoved.emit(i)" class="btn btn-warning ms-2">
+      <fa-icon [icon]="faTrash"></fa-icon>
+    </button>
+    <button type="button" (click)="optionLocked.emit(i)" class="btn btn-warning ms-2" style="max-width: 40px;">
+      <fa-icon *ngIf="optionInput.locked" [icon]="faLock"></fa-icon>
+      <fa-icon *ngIf="!optionInput.locked" [icon]="faLockOpen"></fa-icon>
+    </button>
   </div>
   <div class="d-flex flex-column align-items-center pt-2">
     <button

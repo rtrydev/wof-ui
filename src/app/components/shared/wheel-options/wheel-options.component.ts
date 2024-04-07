@@ -2,11 +2,13 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { WheelElementWrite } from '../../../interfaces/wheel-element-write';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { faLock, faLockOpen, faTrash } from '@fortawesome/free-solid-svg-icons';
 
 @Component({
   selector: 'app-wheel-options',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, FormsModule],
+  imports: [CommonModule, ReactiveFormsModule, FormsModule, FontAwesomeModule],
   templateUrl: './wheel-options.component.html',
   styleUrl: './wheel-options.component.scss'
 })
@@ -31,6 +33,13 @@ export class WheelOptionsComponent {
 
   @Output()
   public optionChanged: EventEmitter<void> = new EventEmitter();
+
+  @Output()
+  public optionLocked: EventEmitter<number> = new EventEmitter<number>();
+
+  public faTrash = faTrash;
+  public faLock = faLock;
+  public faLockOpen = faLockOpen;
 
   public changeCallback() {
     this.optionChanged.emit();
