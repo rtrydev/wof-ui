@@ -17,6 +17,8 @@ export class WheelCollaborationOptionsComponent implements OnInit {
   public shareInProgress = false;
   public collaboration: {id: string, schema_id: string, token: string} | undefined;
 
+  public copied: boolean = false;
+
   constructor(private collaborationService: CollaborationService) { }
 
   ngOnInit(): void {
@@ -37,6 +39,15 @@ export class WheelCollaborationOptionsComponent implements OnInit {
       schema_id: this.wheelId,
       token: collaboration.collaboration_token
     };
+  }
+
+  public copyLinkToClipboard() {
+    navigator.clipboard.writeText(this.getGeneratedInvitationLink());
+
+    this.copied = true;
+    setTimeout(() => {
+      this.copied = false;
+    }, 5000);
   }
 
   private async loadCollaborationOptions() {

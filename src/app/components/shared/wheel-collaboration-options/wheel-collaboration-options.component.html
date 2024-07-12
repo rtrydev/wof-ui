@@ -6,7 +6,10 @@
             <div *ngIf="!shareInProgress">Share</div>
             <div class="spinner-border text-light" style="width: 1rem; height: 1rem;" role="status" *ngIf="shareInProgress"></div>
         </button>
-        <textarea disabled style="width: 960px; max-width: 90%;" rows="1" [value]="getGeneratedInvitationLink()" *ngIf="!loadingCollaboration && collaboration"></textarea>
+        <button [disabled]="copied" class="btn btn-success" style="width: fit-content; width: 256px; height: 38px;" *ngIf="!loadingCollaboration && collaboration" (click)="copyLinkToClipboard()">
+            <div *ngIf="!copied">Copy Invitation to Clipboard</div>
+            <div *ngIf="copied">Copied!</div>
+        </button>
         <div class="spinner-border text-light" style="width: 1rem; height: 1rem;" role="status" *ngIf="loadingCollaboration"></div>
     </div>
 </div>
