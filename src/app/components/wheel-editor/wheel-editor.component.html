@@ -26,6 +26,10 @@
         [variables]="variables"
         [availableSchemas]="userWheels"
     ></app-wheel-variable-list>
+    <app-wheel-collaboration-options
+        *ngIf="currentWheelId"
+        [wheelId]="currentWheelId"
+    ></app-wheel-collaboration-options>
 </div>
 
 <div *ngIf="showResult" style="position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: #000000aa; z-index: 2">

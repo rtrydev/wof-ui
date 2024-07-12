@@ -12,13 +12,14 @@ import { WheelElementWrite } from '../../interfaces/wheel-element-write';
 import { WheelOptionsComponent } from "../shared/wheel-options/wheel-options.component";
 import { WheelVariable } from '../../interfaces/wheel-variable';
 import { WheelVariableListComponent } from "../shared/wheel-variable-list/wheel-variable-list.component";
+import { WheelCollaborationOptionsComponent } from "../shared/wheel-collaboration-options/wheel-collaboration-options.component";
 
 @Component({
     selector: 'app-wheel-editor',
     standalone: true,
     templateUrl: './wheel-editor.component.html',
     styleUrl: './wheel-editor.component.scss',
-    imports: [CommonModule, WheelComponent, ReactiveFormsModule, FormsModule, WheelOptionsComponent, WheelVariableListComponent]
+    imports: [CommonModule, WheelComponent, ReactiveFormsModule, FormsModule, WheelOptionsComponent, WheelVariableListComponent, WheelCollaborationOptionsComponent]
 })
 export class WheelEditorComponent implements AfterContentInit {
   public currentWheelId?: string;

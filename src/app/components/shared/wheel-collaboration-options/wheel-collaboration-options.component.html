@@ -1,0 +1,12 @@
+<h3 class="text-center mt-4 pb-2">Collaboration Options</h3>
+
+<div style="margin-left: auto; margin-right: auto;">
+    <div class="d-flex align-items-center justify-content-center mb-2">
+        <button class="btn btn-success" style="width: fit-content; width: 106px; height: 38px;" *ngIf="!loadingCollaboration && !collaboration" (click)="share()">
+            <div *ngIf="!shareInProgress">Share</div>
+            <div class="spinner-border text-light" style="width: 1rem; height: 1rem;" role="status" *ngIf="shareInProgress"></div>
+        </button>
+        <textarea disabled style="width: 960px; max-width: 90%;" rows="1" [value]="getGeneratedInvitationLink()" *ngIf="!loadingCollaboration && collaboration"></textarea>
+        <div class="spinner-border text-light" style="width: 1rem; height: 1rem;" role="status" *ngIf="loadingCollaboration"></div>
+    </div>
+</div>
