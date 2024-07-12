@@ -8,6 +8,8 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { WheelListComponent } from "../shared/wheel-list/wheel-list.component";
 import { WheelSchema } from '../../interfaces/wheel-schema';
 import { LoginService } from '../../services/login.service';
+import { CollaborationService } from '../../services/collaboration.service';
+import { forkJoin, map, switchMap, tap, zip } from 'rxjs';
 
 @Component({
     selector: 'app-home',
@@ -27,10 +29,16 @@ export class HomeComponent implements OnInit, OnDestroy {
   public wheelProcessing = false;
 
   public userSchemas: WheelSchema[] = [];
+  public collaborationSchemas: WheelSchema[] = [];
 
   private subs: any[] = [];
 
-  constructor(private schemaService: SchemaService, private loginService: LoginService, private router: Router) {}
+  constructor(
+    private schemaService: SchemaService,
+    private loginService: LoginService,
+    private router: Router,
+    private collaborationService: CollaborationService
+  ) {}
 
   ngOnInit(): void {
     this.loadSchemas();
@@ -107,5 +115,41 @@ export class HomeComponent implements OnInit, OnDestroy {
         }))
       }));
     });
+
+    this.collaborationService.getCollaborations()
+      .pipe(
+        tap(collaborations => {
+          this.collaborationSchemas = collaborations.schema_ids.map(schemaId => ({
+            id: schemaId,
+            name: '',
+            elements: [],
+            variables: []
+          }));
+        }),
+        switchMap((collaborations: {schema_ids: string[]}) => {
+          return collaborations.schema_ids.map(
+            schemaId => this.schemaService.getSchema(schemaId)
+              .then(schema => {
+                if (!schema) {
+                  return;
+                }
+
+                const idx = this.collaborationSchemas.findIndex(c => c.id === schema?.id);
+
+                if (idx !== -1) {
+                  this.collaborationSchemas[idx] = {
+                    id: schema.id,
+                    name: schema.name,
+                    elements: schema.elements,
+                    variables: schema.variables.map(variable => ({
+                      variableName: variable.variable_name,
+                      wheelId: variable.wheel_id
+                    }))
+                  };
+                }
+              })
+          );
+        })
+      ).subscribe();
   }
 }

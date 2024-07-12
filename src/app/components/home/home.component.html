@@ -17,5 +17,6 @@
     (optionRemoved)="removeOption($event)"
     (wheelSubmitted)="createWheel()"
   ></app-wheel-options>
-  <app-wheel-list [wheelSchemas]="userSchemas"></app-wheel-list>
+  <app-wheel-list [wheelSchemas]="userSchemas" [listTitle]="'Your wheels:'"></app-wheel-list>
+  <app-wheel-list [wheelSchemas]="collaborationSchemas" [listTitle]="'Guest wheels:'"></app-wheel-list>
 </div>

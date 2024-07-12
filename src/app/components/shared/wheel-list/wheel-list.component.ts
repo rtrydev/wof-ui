@@ -14,6 +14,9 @@ export class WheelListComponent {
   @Input()
   public wheelSchemas: WheelSchema[] = [];
 
+  @Input()
+  public listTitle: string = "";
+
   constructor(private router: Router) {}
 
   public navigateToSchema(schemaId: string) {
