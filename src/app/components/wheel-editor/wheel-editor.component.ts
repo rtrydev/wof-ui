@@ -28,7 +28,7 @@ export class WheelEditorComponent implements AfterContentInit {
 
   public userWheels: WheelSchema[] = [];
 
-  public wheelSize = 500;
+  public wheelSize = 750;
   public calculatedWheelSize: number = this.wheelSize;
 
   public textSize = 20;
