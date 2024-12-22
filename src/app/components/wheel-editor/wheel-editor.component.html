@@ -16,6 +16,7 @@
         [optionInputs]="optionInputs"
         [submitProcessing]="wheelProcessing"
         [submitActive]="!wheelProcessing"
+        [canEdit]="canEdit"
         (optionAdded)="addOption()"
         (optionRemoved)="removeOption($event)"
         (optionChanged)="updateVariables()"
@@ -25,9 +26,10 @@
     <app-wheel-variable-list
         [variables]="variables"
         [availableSchemas]="getAvailableWheels()"
+        [canEdit]="canEdit"
     ></app-wheel-variable-list>
     <app-wheel-collaboration-options
-        *ngIf="currentWheelId"
+        *ngIf="currentWheelId && isOwner"
         [wheelId]="currentWheelId"
     ></app-wheel-collaboration-options>
 </div>

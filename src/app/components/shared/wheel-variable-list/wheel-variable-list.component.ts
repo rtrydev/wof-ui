@@ -17,4 +17,7 @@ export class WheelVariableListComponent {
 
   @Input()
   public availableSchemas?: WheelSchema[];
+
+  @Input()
+  public canEdit: boolean = false;
 }

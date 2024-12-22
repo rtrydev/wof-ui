@@ -13,6 +13,8 @@ import { WheelOptionsComponent } from "../shared/wheel-options/wheel-options.com
 import { WheelVariable } from '../../interfaces/wheel-variable';
 import { WheelVariableListComponent } from "../shared/wheel-variable-list/wheel-variable-list.component";
 import { WheelCollaborationOptionsComponent } from "../shared/wheel-collaboration-options/wheel-collaboration-options.component";
+import { CollaborationService } from '../../services/collaboration.service';
+import { LoginService } from '../../services/login.service';
 
 @Component({
     selector: 'app-wheel-editor',
@@ -49,10 +51,14 @@ export class WheelEditorComponent implements AfterContentInit {
   public variablesInCurrentResult?: WheelVariable[];
 
   public window = window;
+  public canEdit = false;
+  public isOwner = false;
 
   constructor(
     private schemaService: SchemaService,
-    private activatedRoute: ActivatedRoute
+    private activatedRoute: ActivatedRoute,
+    private collaborationService: CollaborationService,
+    private loginService: LoginService
   ) { }
 
   ngOnInit() {
@@ -280,6 +286,19 @@ export class WheelEditorComponent implements AfterContentInit {
             wheelId: v.wheel_id
           }))
         };
+
+        this.isOwner = this.userWheels.some(wheel => wheel.id === schema.id);
+
+        if (!this.isOwner && !!this.loginService.currentUser) {
+          this.collaborationService.getCollaborations()
+            .pipe(
+              tap(collaborations => {
+                this.canEdit = collaborations.schema_ids.some(id => id === schema.id);
+              })
+            ).subscribe();
+        } else {
+          this.canEdit = this.isOwner;
+        }
 
         this.loadOptions(mappedSchema);
         this.loadVariables(mappedSchema);

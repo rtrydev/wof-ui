@@ -10,13 +10,14 @@ import { WheelSchema } from '../../interfaces/wheel-schema';
 import { LoginService } from '../../services/login.service';
 import { CollaborationService } from '../../services/collaboration.service';
 import { forkJoin, map, switchMap, tap, zip } from 'rxjs';
+import { WheelComponent } from '../shared/wheel/wheel.component';
 
 @Component({
     selector: 'app-home',
     standalone: true,
     templateUrl: './home.component.html',
     styleUrl: './home.component.scss',
-    imports: [CommonModule, WheelOptionsComponent, ReactiveFormsModule, FormsModule, WheelListComponent]
+    imports: [CommonModule, WheelOptionsComponent, ReactiveFormsModule, FormsModule, WheelListComponent, WheelComponent]
 })
 export class HomeComponent implements OnInit, OnDestroy {
   public wheelName: string = '';
@@ -28,6 +29,7 @@ export class HomeComponent implements OnInit, OnDestroy {
 
   public wheelProcessing = false;
 
+  public isLoggedIn = false;
   public userSchemas: WheelSchema[] = [];
   public collaborationSchemas: WheelSchema[] = [];
 
@@ -42,10 +44,12 @@ export class HomeComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.loadSchemas();
+    this.isLoggedIn = !!this.loginService.currentUser;
 
     this.subs.push(
       this.loginService.loggedInSubject.subscribe(() => {
         this.loadSchemas();
+        this.isLoggedIn = true;
       })
     );
   }

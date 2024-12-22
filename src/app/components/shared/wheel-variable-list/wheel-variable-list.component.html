@@ -3,7 +3,7 @@
 <div *ngIf="variables && availableSchemas" style="margin-left: auto; margin-right: auto;">
     <div *ngFor="let variable of variables; let i = index;" class="d-flex align-items-center justify-content-center mb-2">
         <span class="text-white variable-name me-1">{{variable.variableName}}</span>
-        <select [(ngModel)]="variable.wheelId" [name]="'wheelDropdown' + i" class="form-control mx-2" style="width: 200px;" id="role">
+        <select [(ngModel)]="variable.wheelId" [name]="'wheelDropdown' + i" [disabled]="!canEdit" class="form-control mx-2" style="width: 200px;" id="role">
             <option [value]="undefined">None</option>
             <option *ngFor="let schema of availableSchemas" [value]="schema.id">{{schema.name}}</option>
         </select>

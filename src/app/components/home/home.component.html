@@ -1,22 +1,28 @@
-<h2 class="text-center pt-5 pb-3">Create a wheel</h2>
-<div class="wheel-creator-container">
-  <div class="d-flex justify-content-center mb-2">
-    <input
-      placeholder="Wheel name"
-      [name]="'wheelName'"
-      class="wheel-form-option"
-      type="text"
-      [(ngModel)]="wheelName"
-    >
+@if (isLoggedIn) {
+  <h2 class="text-center pt-5 pb-3">Create a wheel</h2>
+  <div class="wheel-creator-container">
+    <div class="d-flex justify-content-center mb-2">
+      <input
+        placeholder="Wheel name"
+        [name]="'wheelName'"
+        class="wheel-form-option"
+        type="text"
+        [(ngModel)]="wheelName"
+      >
+    </div>
+    <app-wheel-options
+      [optionInputs]="optionInputs"
+      [submitActive]="!!wheelName && !wheelProcessing"
+      [submitProcessing]="wheelProcessing"
+      [canEdit]="isLoggedIn"
+      (optionAdded)="addOption()"
+      (optionRemoved)="removeOption($event)"
+      (wheelSubmitted)="createWheel()"
+    ></app-wheel-options>
+    <app-wheel-list [wheelSchemas]="userSchemas" [listTitle]="'Your wheels:'"></app-wheel-list>
+    <app-wheel-list [wheelSchemas]="collaborationSchemas" [listTitle]="'Guest wheels:'"></app-wheel-list>
   </div>
-  <app-wheel-options
-    [optionInputs]="optionInputs"
-    [submitActive]="!!wheelName && !wheelProcessing"
-    [submitProcessing]="wheelProcessing"
-    (optionAdded)="addOption()"
-    (optionRemoved)="removeOption($event)"
-    (wheelSubmitted)="createWheel()"
-  ></app-wheel-options>
-  <app-wheel-list [wheelSchemas]="userSchemas" [listTitle]="'Your wheels:'"></app-wheel-list>
-  <app-wheel-list [wheelSchemas]="collaborationSchemas" [listTitle]="'Guest wheels:'"></app-wheel-list>
-</div>
+} @else {
+  <h2 class="text-center pt-5 pb-3">Log in to create a wheel</h2>
+}
+
