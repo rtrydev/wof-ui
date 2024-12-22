@@ -24,7 +24,7 @@
     ></app-wheel-options>
     <app-wheel-variable-list
         [variables]="variables"
-        [availableSchemas]="userWheels"
+        [availableSchemas]="getAvailableWheels()"
     ></app-wheel-variable-list>
     <app-wheel-collaboration-options
         *ngIf="currentWheelId"

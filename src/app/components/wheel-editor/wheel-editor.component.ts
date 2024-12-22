@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { WheelComponent } from "../shared/wheel/wheel.component";
 import { SchemaService } from '../../services/schema.service';
 import { ActivatedRoute } from '@angular/router';
-import { take, tap } from 'rxjs';
+import { forkJoin, from, take, tap } from 'rxjs';
 import { WheelSchema } from '../../interfaces/wheel-schema';
 import { WheelOption } from '../../interfaces/wheel-option';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -28,6 +28,7 @@ export class WheelEditorComponent implements AfterContentInit {
   public variables: WheelVariable[] = [];
 
   public userWheels: WheelSchema[] = [];
+  public foreignWheels: WheelSchema[] = [];
 
   public wheelSize = 750;
   public calculatedWheelSize: number = this.wheelSize;
@@ -55,16 +56,6 @@ export class WheelEditorComponent implements AfterContentInit {
   ) { }
 
   ngOnInit() {
-    this.activatedRoute.params.pipe(
-      take(1),
-        tap((params: any) => {
-          this.currentWheelId = params.id;
-        }),
-        tap(() => {
-          this.loadWheel();
-      })
-    ).subscribe();
-
     this.schemaService.getSchemas().then(schemas => {
       this.userWheels = schemas.filter(s => s.id !== this.currentWheelId).map(schema => ({
         id: schema.id,
@@ -79,6 +70,16 @@ export class WheelEditorComponent implements AfterContentInit {
           wheelId: v.wheel_id
         }))
       }));
+
+      this.activatedRoute.params.pipe(
+        take(1),
+          tap((params: any) => {
+            this.currentWheelId = params.id;
+          }),
+          tap(() => {
+            this.loadWheel();
+        })
+      ).subscribe();
     });
   }
 
@@ -201,7 +202,7 @@ export class WheelEditorComponent implements AfterContentInit {
   }
 
   public getOptionsForWheelId(wheelId: string): WheelOption[] {
-    const wheel = this.userWheels.find(wheel => wheel.id === wheelId);
+    const wheel = this.getAvailableWheels().find(wheel => wheel.id === wheelId);
 
     if (!wheel) {
       return [];
@@ -238,8 +239,15 @@ export class WheelEditorComponent implements AfterContentInit {
     this.currentResult = this.currentResult.replaceAll(`{${variable}}`, value);
   }
 
+  public getAvailableWheels(): WheelSchema[] {
+    return [
+      ...this.userWheels,
+      ...this.foreignWheels
+    ];
+  }
+
   public getWheelNameForId(wheelId: string): string {
-    const wheel = this.userWheels.find(wheel => wheel.id === wheelId);
+    const wheel = this.getAvailableWheels().find(wheel => wheel.id === wheelId);
 
     if (!wheel) {
       return '';
@@ -281,6 +289,26 @@ export class WheelEditorComponent implements AfterContentInit {
 
   private loadVariables(wheelSchema: WheelSchema): void {
     this.variables = wheelSchema.variables || [];
+
+    forkJoin(
+      this.variables
+        .filter(variable => !!variable.wheelId && !this.userWheels
+          .some(wheel => wheel.id === variable.wheelId)
+        ).map(variable => from(this.schemaService.getSchema(variable.wheelId!)))
+    ).subscribe(wheelSchemas => {
+      this.foreignWheels = wheelSchemas
+        .filter(schema => !!schema)
+        .map(schema => ({
+          id: schema!.id,
+          name: schema!.name,
+          elements: schema!.elements,
+          variables: schema!.variables.map(
+            variable => ({
+              variableName: variable.variable_name
+            })
+          )
+        }));
+    });
   }
 
   private loadFormOptions(options: WheelOption[]) {
@@ -325,10 +353,9 @@ export class WheelEditorComponent implements AfterContentInit {
     this.optionInputs.forEach(option => {
       const foundVariables = this.findVariablesInString(option.text);
 
-
       foundVariables.forEach(v => {
         variables.add(v);
-      })
+      });
     });
 
     return Array.from(variables);
