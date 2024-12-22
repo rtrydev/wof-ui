@@ -70,7 +70,7 @@ export class WheelEditorComponent implements AfterContentInit {
           wheelId: v.wheel_id
         }))
       }));
-
+    }).finally(() => {
       this.activatedRoute.params.pipe(
         take(1),
           tap((params: any) => {
