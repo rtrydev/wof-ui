@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, ComponentRef, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { WheelOptionsComponent } from "../shared/wheel-options/wheel-options.component";
 import { WheelElementWrite } from '../../interfaces/wheel-element-write';
@@ -9,19 +9,25 @@ import { WheelListComponent } from "../shared/wheel-list/wheel-list.component";
 import { WheelSchema } from '../../interfaces/wheel-schema';
 import { LoginService } from '../../services/login.service';
 import { CollaborationService } from '../../services/collaboration.service';
-import { forkJoin, map, switchMap, tap, zip } from 'rxjs';
-import { WheelComponent } from '../shared/wheel/wheel.component';
+import { switchMap, tap } from 'rxjs';
+import { WheelEditorComponent } from '../wheel-editor/wheel-editor.component';
 
 @Component({
     selector: 'app-home',
     standalone: true,
     templateUrl: './home.component.html',
     styleUrl: './home.component.scss',
-    imports: [CommonModule, WheelOptionsComponent, ReactiveFormsModule, FormsModule, WheelListComponent, WheelComponent]
+    imports: [CommonModule, WheelOptionsComponent, ReactiveFormsModule, FormsModule, WheelListComponent, WheelEditorComponent]
 })
 export class HomeComponent implements OnInit, OnDestroy {
   public wheelName: string = '';
   public optionInputs: WheelElementWrite[] = [
+    {text: 'Option 1', locked: false},
+    {text: 'Option 2', locked: false},
+    {text: 'Option 3', locked: false},
+  ];
+
+  public demoOptions: WheelElementWrite[] = [
     {text: 'Option 1', locked: false},
     {text: 'Option 2', locked: false},
     {text: 'Option 3', locked: false},
@@ -58,13 +64,6 @@ export class HomeComponent implements OnInit, OnDestroy {
     this.subs.forEach(sub => sub.unsubscribe());
   }
 
-  public addOption(): void {
-    this.optionInputs.push({
-      text: '',
-      locked: false
-    });
-  }
-
   public async createWheel(): Promise<void> {
     if (this.optionInputs.length === 0) {
       return;
@@ -95,8 +94,28 @@ export class HomeComponent implements OnInit, OnDestroy {
     }
   }
 
+  public addOption(): void {
+    this.optionInputs.push({
+      text: '',
+      locked: false
+    });
+    this.updateDemoWheel();
+  }
+
   public removeOption(index: number): void {
     this.optionInputs.splice(index, 1);
+    this.updateDemoWheel();
+  }
+
+  public updateDemoWheel() {
+    this.demoOptions = [
+      ...this.optionInputs
+    ];
+  }
+
+  public lockOption(index: number) {
+    this.optionInputs[index].locked = !this.optionInputs[index].locked;
+    this.updateDemoWheel();
   }
 
   private loadSchemas() {

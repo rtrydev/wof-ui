@@ -1,4 +1,4 @@
-import { AfterContentInit, AfterViewInit, Component, HostListener } from '@angular/core';
+import { AfterContentInit, Component, HostListener, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { WheelComponent } from "../shared/wheel/wheel.component";
 import { SchemaService } from '../../services/schema.service';
@@ -24,6 +24,14 @@ import { LoginService } from '../../services/login.service';
     imports: [CommonModule, WheelComponent, ReactiveFormsModule, FormsModule, WheelOptionsComponent, WheelVariableListComponent, WheelCollaborationOptionsComponent]
 })
 export class WheelEditorComponent implements AfterContentInit {
+  @Input()
+  public set staticOptions(value: WheelElementWrite[]) {
+    this._staticOptions = value;
+    this.loadStaticWheel();
+  }
+
+  public demoMode: boolean = false;
+
   public currentWheelId?: string;
   public wheelName?: string;
   public options: WheelOption[] = [];
@@ -53,6 +61,8 @@ export class WheelEditorComponent implements AfterContentInit {
   public window = window;
   public canEdit = false;
   public isOwner = false;
+
+  private _staticOptions?: WheelElementWrite[];
 
   constructor(
     private schemaService: SchemaService,
@@ -263,6 +273,10 @@ export class WheelEditorComponent implements AfterContentInit {
   }
 
   private loadWheel() {
+    if (this.loadStaticWheel()) {
+      return;
+    }
+
     if (!this.currentWheelId) {
       return;
     }
@@ -304,6 +318,33 @@ export class WheelEditorComponent implements AfterContentInit {
         this.loadVariables(mappedSchema);
       }
     );
+  }
+
+  private loadStaticWheel(): boolean {
+    if (!this._staticOptions) {
+      return false;
+    }
+
+    this.demoMode = true;
+
+    const mappedSchema: WheelSchema = {
+      id: '',
+      name: '',
+      elements: this._staticOptions.map(e => ({
+        id: '',
+        text: e.text,
+        locked: e.locked ?? false
+      })),
+      variables: []
+    };
+
+    this.isOwner = true;
+    this.canEdit = true;
+
+    this.loadOptions(mappedSchema);
+    this.loadVariables(mappedSchema);
+
+    return true;
   }
 
   private loadVariables(wheelSchema: WheelSchema): void {

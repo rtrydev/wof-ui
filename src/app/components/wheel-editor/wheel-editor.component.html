@@ -13,6 +13,7 @@
         ></app-wheel>
     </div>
     <app-wheel-options
+        *ngIf="!demoMode"
         [optionInputs]="optionInputs"
         [submitProcessing]="wheelProcessing"
         [submitActive]="!wheelProcessing"
@@ -24,6 +25,7 @@
         (wheelSubmitted)="updateWheel()"
     ></app-wheel-options>
     <app-wheel-variable-list
+        *ngIf="!demoMode"
         [variables]="variables"
         [availableSchemas]="getAvailableWheels()"
         [canEdit]="canEdit"

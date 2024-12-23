@@ -26,13 +26,14 @@
       style="width: fit-content;"
     >Add option</button>
     <button
+      *ngIf="showSubmit"
       type="button"
       (click)="wheelSubmitted.emit()"
       [disabled]="!optionInputs.length || !submitActive || !canEdit"
       class="btn btn-success"
       style="width: fit-content; width: 106px; height: 38px;"
     >
-    <div *ngIf="!submitProcessing && canEdit">Submit</div>
+    <div *ngIf="!submitProcessing && canEdit">Save</div>
     <div *ngIf="!canEdit">View Only</div>
     <div class="spinner-border text-light" style="width: 1rem; height: 1rem;" role="status" *ngIf="submitProcessing"></div>
     </button>

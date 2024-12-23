@@ -25,6 +25,9 @@ export class WheelOptionsComponent {
   @Input()
   public canEdit: boolean = false;
 
+  @Input()
+  public showSubmit: boolean = true;
+
   @Output()
   public optionRemoved: EventEmitter<number> = new EventEmitter<number>();
 
