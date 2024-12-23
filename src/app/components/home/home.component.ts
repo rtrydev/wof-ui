@@ -3,14 +3,15 @@ import { CommonModule } from '@angular/common';
 import { WheelOptionsComponent } from "../shared/wheel-options/wheel-options.component";
 import { WheelElementWrite } from '../../interfaces/wheel-element-write';
 import { SchemaService } from '../../services/schema.service';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { WheelListComponent } from "../shared/wheel-list/wheel-list.component";
 import { WheelSchema } from '../../interfaces/wheel-schema';
 import { LoginService } from '../../services/login.service';
 import { CollaborationService } from '../../services/collaboration.service';
-import { switchMap, tap } from 'rxjs';
+import { switchMap, take, tap } from 'rxjs';
 import { WheelEditorComponent } from '../wheel-editor/wheel-editor.component';
+import LZString from 'lz-string';
 
 @Component({
     selector: 'app-home',
@@ -26,12 +27,7 @@ export class HomeComponent implements OnInit, OnDestroy {
     {text: 'Option 2', locked: false},
     {text: 'Option 3', locked: false},
   ];
-
-  public demoOptions: WheelElementWrite[] = [
-    {text: 'Option 1', locked: false},
-    {text: 'Option 2', locked: false},
-    {text: 'Option 3', locked: false},
-  ];
+  public demoOptions: WheelElementWrite[] = [];
 
   public wheelProcessing = false;
 
@@ -45,10 +41,29 @@ export class HomeComponent implements OnInit, OnDestroy {
     private schemaService: SchemaService,
     private loginService: LoginService,
     private router: Router,
-    private collaborationService: CollaborationService
+    private collaborationService: CollaborationService,
+    private route: ActivatedRoute
   ) {}
 
   ngOnInit(): void {
+    this.route.queryParams
+      .pipe(take(1))
+      .subscribe(params => {
+        if (params['wheelData']) {
+          try {
+            this.optionInputs = JSON.parse(
+              LZString.decompressFromBase64(
+                decodeURIComponent(params['wheelData'])
+              )
+            );
+          } catch (err) {
+            console.error('Could not load wheel from the url!', err);
+          }
+        }
+        this.demoOptions = this.optionInputs;
+      }
+    );
+
     this.loadSchemas();
     this.isLoggedIn = !!this.loginService.currentUser;
 
@@ -111,6 +126,24 @@ export class HomeComponent implements OnInit, OnDestroy {
     this.demoOptions = [
       ...this.optionInputs
     ];
+
+    this.route.title
+      .pipe(take(1))
+      .subscribe(title => {
+        history.pushState(history.state, title!, this.router.createUrlTree(
+          [],
+          {
+            relativeTo: this.route,
+            queryParams: {
+              wheelData: encodeURIComponent(
+                LZString.compressToBase64(JSON.stringify(this.optionInputs))
+              )
+            },
+            queryParamsHandling: 'merge',
+            preserveFragment: true
+          }
+        ).toString());
+      });
   }
 
   public lockOption(index: number) {

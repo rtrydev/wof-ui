@@ -29,19 +29,21 @@
   </div>
 } @else {
   <h2 class="text-center pt-5 pb-3">Log in to save a wheel</h2>
-  <app-wheel-editor
-    [staticOptions]="demoOptions"
-  ></app-wheel-editor>
-  <app-wheel-options
-    [optionInputs]="optionInputs"
-    [submitProcessing]="wheelProcessing"
-    [submitActive]="!wheelProcessing"
-    [canEdit]="true"
-    [showSubmit]="false"
-    (optionAdded)="addOption()"
-    (optionRemoved)="removeOption($event)"
-    (optionChanged)="updateDemoWheel()"
-    (optionLocked)="lockOption($event)"
-  ></app-wheel-options>
+  <div class="wheel-creator-container">
+    <app-wheel-editor
+      [staticOptions]="demoOptions"
+    ></app-wheel-editor>
+    <app-wheel-options
+      [optionInputs]="optionInputs"
+      [submitProcessing]="wheelProcessing"
+      [submitActive]="!wheelProcessing"
+      [canEdit]="true"
+      [showSubmit]="false"
+      (optionAdded)="addOption()"
+      (optionRemoved)="removeOption($event)"
+      (optionChanged)="updateDemoWheel()"
+      (optionLocked)="lockOption($event)"
+    ></app-wheel-options>
+  </div>
 }
 
